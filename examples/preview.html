@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C3yPTaX Designvorschau</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon/c3yptax-icon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="../assets/icon/c3yptax-icon-64.png">
+<link rel="stylesheet" href="../tokens/c3.css">
+<link rel="stylesheet" href="c3-ui.css">
+<style>
+  /* Seitenlayout der Vorschau. Komponenten stehen in c3-ui.css. */
+  html, body { height: 100%; }
+  body { overflow: hidden; }
+
+  .app { display: grid; grid-template-rows: var(--c3-size-titlebar) 1fr; height: 100vh; }
+
+  .titlebar {
+    display: flex; align-items: center; gap: var(--c3-space-3);
+    padding-left: var(--c3-space-4);
+    background: var(--c3-color-bg-subtle);
+    border-bottom: 1px solid var(--c3-color-border-subtle);
+    user-select: none;
+  }
+  .titlebar img { width: 20px; height: 20px; }
+  .titlebar__name { font: var(--c3-typography-label); color: var(--c3-color-text-primary); }
+  .titlebar__sep { width: 1px; height: 16px; background: var(--c3-color-border-default); }
+  .titlebar__doc { font: var(--c3-typography-small); color: var(--c3-color-text-muted); }
+  .titlebar__controls { margin-left: auto; display: flex; height: 100%; }
+  .winbtn {
+    width: 46px; height: 100%; border: 0; background: transparent; color: var(--c3-color-text-secondary);
+    display: grid; place-items: center; cursor: default;
+    transition: background-color var(--c3-motion-duration-fast) var(--c3-motion-easing-standard), color var(--c3-motion-duration-fast) var(--c3-motion-easing-standard);
+  }
+  .winbtn:hover { background: var(--c3-color-surface-control); color: var(--c3-color-text-primary); }
+  .winbtn--close:hover { background: var(--c3-color-status-danger-solid); color: #FFFFFF; }
+  .winbtn svg { width: 10px; height: 10px; stroke: currentColor; stroke-width: 1; fill: none; }
+
+  .body { display: grid; grid-template-columns: var(--c3-size-sidebar) 1fr; min-height: 0; }
+
+  .sidebar {
+    display: flex; flex-direction: column;
+    padding: var(--c3-space-3);
+    background: var(--c3-color-bg-subtle);
+    border-right: 1px solid var(--c3-color-border-subtle);
+    overflow-y: auto;
+  }
+  .sidebar__footer {
+    margin-top: auto; padding: var(--c3-space-3);
+    display: flex; align-items: center; gap: var(--c3-space-2);
+    font: var(--c3-typography-caption); color: var(--c3-color-text-muted);
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c3-color-status-success); flex: none; }
+
+  .main { overflow-y: auto; min-width: 0; }
+  .page { max-width: 1180px; margin: 0 auto; padding: var(--c3-space-8) var(--c3-space-8) var(--c3-space-12); }
+  .page__header { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--c3-space-4); margin-bottom: var(--c3-space-6); flex-wrap: wrap; }
+  .page__header p { color: var(--c3-color-text-muted); margin-top: var(--c3-space-1); }
+  .page__actions { display: flex; gap: var(--c3-space-2); }
+
+  .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--c3-space-4); margin-bottom: var(--c3-space-6); }
+  .stat__label { font: var(--c3-typography-small); color: var(--c3-color-text-muted); }
+  .stat__value { font: var(--c3-typography-display); margin-top: var(--c3-space-2); font-variant-numeric: tabular-nums; }
+  .stat__meta { margin-top: var(--c3-space-1); font: var(--c3-typography-caption); color: var(--c3-color-text-muted); }
+  .stat__meta--ok { color: var(--c3-color-status-success); }
+
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: var(--c3-space-4); align-items: start; }
+
+  .toolbar { display: flex; gap: var(--c3-space-2); padding: var(--c3-space-4); align-items: center; flex-wrap: wrap; }
+  .toolbar .c3-input-group { width: 240px; }
+  .toolbar .c3-select { width: 170px; }
+  .toolbar__end { margin-left: auto; }
+  .table-card { padding: 0; overflow: visible; }
+  .table-card .c3-tabs { padding: 0 var(--c3-space-4); }
+  .table-wrap { overflow-x: auto; }
+  .table-foot { display: flex; justify-content: space-between; align-items: center; padding: var(--c3-space-3) var(--c3-space-4); font: var(--c3-typography-caption); color: var(--c3-color-text-muted); }
+  .cell-device { display: flex; align-items: center; gap: var(--c3-space-2); }
+  .cell-actions { display: flex; justify-content: flex-end; gap: var(--c3-space-1); }
+  .c3-table th:last-child { width: 150px; }
+  #ctxMenu { position: fixed; top: 0; left: 0; right: auto; }
+
+  .devices { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--c3-space-3); padding: var(--c3-space-4); }
+  .device__top { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--c3-space-3); }
+  .device__name { font: var(--c3-typography-label); color: var(--c3-color-text-primary); }
+
+  .activity__time { margin-left: auto; font: var(--c3-typography-caption); color: var(--c3-color-text-muted); white-space: nowrap; }
+  .activity__icon { width: 28px; height: 28px; border-radius: var(--c3-radius-sm); display: grid; place-items: center; background: var(--c3-color-surface-control); color: var(--c3-color-text-muted); flex: none; }
+  .activity__icon--ok { background: var(--c3-color-status-success-subtle); color: var(--c3-color-status-success); }
+  .activity__icon--warn { background: var(--c3-color-status-warning-subtle); color: var(--c3-color-status-warning); }
+  .activity__text { font: var(--c3-typography-small); color: var(--c3-color-text-secondary); }
+  .activity__text strong { color: var(--c3-color-text-primary); font-weight: var(--c3-font-weight-semibold); }
+  .skeleton-row { display: flex; gap: var(--c3-space-3); align-items: center; padding: var(--c3-space-3) 0; }
+  .fade-in { animation: c3-panel-in var(--c3-motion-duration-normal) var(--c3-motion-easing-enter); }
+
+  .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--c3-space-4); }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--c3-space-4); }
+  .stack { display: grid; gap: var(--c3-space-4); align-content: start; }
+  .row { display: flex; gap: var(--c3-space-2); flex-wrap: wrap; align-items: center; }
+  .section-title { font: var(--c3-typography-heading); margin: var(--c3-space-8) 0 var(--c3-space-4); }
+  .section-title:first-child { margin-top: 0; }
+  .card-title { font: var(--c3-typography-heading); }
+  .card-sub { font: var(--c3-typography-small); color: var(--c3-color-text-muted); margin-top: 2px; }
+
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--c3-space-3); }
+  .swatch { border: 1px solid var(--c3-color-border-subtle); border-radius: var(--c3-radius-md); overflow: hidden; background: var(--c3-color-surface-card); }
+  .swatch__color { height: 56px; border-bottom: 1px solid var(--c3-color-border-subtle); }
+  .swatch__meta { padding: var(--c3-space-2) var(--c3-space-3); }
+  .swatch__name { font: var(--c3-typography-caption); color: var(--c3-color-text-primary); }
+  .swatch__hex { font: var(--c3-typography-code); font-size: var(--c3-font-size-xs); color: var(--c3-color-text-muted); }
+
+  .type-row { display: grid; grid-template-columns: 140px 1fr; gap: var(--c3-space-4); align-items: baseline; padding: var(--c3-space-3) 0; border-bottom: 1px solid var(--c3-color-border-subtle); }
+  .type-row:last-child { border-bottom: 0; }
+  .space-row { display: flex; align-items: center; gap: var(--c3-space-3); font: var(--c3-typography-caption); color: var(--c3-color-text-muted); }
+  .space-row span:first-child { width: 72px; }
+  .space-bar { height: 8px; border-radius: 2px; background: var(--c3-color-accent-border); }
+  .radius-box { width: 64px; height: 48px; background: var(--c3-color-surface-control); border: 1px solid var(--c3-color-border-strong); }
+
+  .demo-label { font: var(--c3-typography-caption); color: var(--c3-color-text-muted); margin-bottom: var(--c3-space-2); }
+
+  .motion-row .c3-code { white-space: nowrap; }
+  .motion-row { display: grid; grid-template-columns: 150px 130px 1fr; gap: var(--c3-space-4); align-items: center; padding: var(--c3-space-3) 0; border-bottom: 1px solid var(--c3-color-border-subtle); }
+  .motion-row:last-child { border-bottom: 0; }
+  .hover-chip {
+    height: 32px; border-radius: var(--c3-radius-sm); background: var(--c3-color-surface-control);
+    display: grid; place-items: center; font: var(--c3-typography-caption); color: var(--c3-color-text-secondary);
+    transition-property: background-color, color, transform; transition-timing-function: var(--c3-motion-easing-standard);
+  }
+  .hover-chip:hover { background: var(--c3-color-accent-subtle); color: var(--c3-color-accent-text); transform: translateY(calc(var(--c3-motion-distance-lift) * -1)); }
+  .track { position: relative; height: 28px; border-radius: var(--c3-radius-full); background: var(--c3-color-surface-input); }
+  .track__dot {
+    position: absolute; top: 6px; left: 6px; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--c3-color-accent-default);
+    transition: transform var(--c3-motion-duration-slow);
+  }
+  .track.is-on .track__dot { transform: translateX(calc(var(--track-w, 200px) - 28px)); }
+
+  .brand-tile { display: grid; place-items: center; min-height: 220px; background: var(--c3-color-brand-deep); border-radius: var(--c3-radius-md); border: 1px solid var(--c3-color-border-subtle); overflow: hidden; }
+  .brand-tile img { max-width: 100%; display: block; -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent); mask-image: radial-gradient(closest-side, #000 72%, transparent); }
+  .icon-row { display: flex; align-items: flex-end; gap: var(--c3-space-5); flex-wrap: wrap; padding: var(--c3-space-5); background: var(--c3-color-bg-canvas); border-radius: var(--c3-radius-md); border: 1px solid var(--c3-color-border-subtle); }
+  .icon-row figure { margin: 0; display: grid; justify-items: center; gap: var(--c3-space-2); font: var(--c3-typography-caption); color: var(--c3-color-text-muted); }
+  .rules { display: grid; gap: var(--c3-space-2); margin: var(--c3-space-3) 0 0; padding: 0; list-style: none; font: var(--c3-typography-small); color: var(--c3-color-text-secondary); }
+  .rules li { display: flex; gap: var(--c3-space-2); }
+  .rules .c3-icon { margin-top: 2px; }
+  .yes { color: var(--c3-color-status-success); }
+  .no { color: var(--c3-color-status-danger); }
+
+  @media (max-width: 1100px) {
+    .split { grid-template-columns: minmax(0, 1fr); }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 820px) {
+    .body { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .page { padding: var(--c3-space-5) var(--c3-space-4) var(--c3-space-10); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .titlebar__doc, .titlebar__sep { display: none; }
+    .motion-row { grid-template-columns: 1fr; gap: var(--c3-space-2); }
+    .type-row { grid-template-columns: 1fr; gap: var(--c3-space-1); }
+  }
+  @media (max-width: 520px) {
+    .stats { grid-template-columns: 1fr; }
+    .toolbar .c3-input-group, .toolbar .c3-select { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Symbolsatz: 16 px Raster, 1,5 px Linie -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-grid" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></g></symbol>
+    <symbol id="i-layers" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M8 2 14 5 8 8 2 5Z"/><path d="m2 8 6 3 6-3"/><path d="m2 11 6 3 6-3"/></g></symbol>
+    <symbol id="i-cpu" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="8" height="8" rx="1.5"/><path d="M6 1.5V4M10 1.5V4M6 12v2.5M10 12v2.5M1.5 6H4M1.5 10H4M12 6h2.5M12 10h2.5"/></g></symbol>
+    <symbol id="i-list" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5.5 4h8M5.5 8h8M5.5 12h8"/><circle cx="2.5" cy="4" r=".5"/><circle cx="2.5" cy="8" r=".5"/><circle cx="2.5" cy="12" r=".5"/></g></symbol>
+    <symbol id="i-palette" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="5" r=".75" fill="currentColor"/><circle cx="5" cy="8" r=".75" fill="currentColor"/><circle cx="11" cy="8" r=".75" fill="currentColor"/></g></symbol>
+    <symbol id="i-blocks" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="4" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></g></symbol>
+    <symbol id="i-motion" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 12c3 0 4-8 7-8s3 4 5 4"/></g></symbol>
+    <symbol id="i-image" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="m2.5 11 3.5-3.5 3 3 2-2 2.5 2.5"/></g></symbol>
+    <symbol id="i-settings" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.25"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4"/></g></symbol>
+    <symbol id="i-search" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></g></symbol>
+    <symbol id="i-plus" viewBox="0 0 16 16"><path d="M8 3v10M3 8h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 16 16"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 16 16"><path d="m3.5 8.5 3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 16 16"><path d="m4 4 8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-info" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7.5V11"/><circle cx="8" cy="5" r=".5" fill="currentColor"/></g></symbol>
+    <symbol id="i-alert" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2 14.5 13.5h-13Z"/><path d="M8 6.5v3"/><circle cx="8" cy="11.5" r=".4" fill="currentColor"/></g></symbol>
+    <symbol id="i-error" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="m6 6 4 4M10 6l-4 4"/></g></symbol>
+    <symbol id="i-ok" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="m5.5 8.2 1.8 1.8 3.2-3.6"/></g></symbol>
+    <symbol id="i-more" viewBox="0 0 16 16"><g fill="currentColor"><circle cx="3.5" cy="8" r="1.1"/><circle cx="8" cy="8" r="1.1"/><circle cx="12.5" cy="8" r="1.1"/></g></symbol>
+    <symbol id="i-download" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10"/></g></symbol>
+    <symbol id="i-refresh" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8a5 5 0 1 1-1.5-3.5"/><path d="M13 2.5V5h-2.5"/></g></symbol>
+    <symbol id="i-copy" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"/></g></symbol>
+    <symbol id="i-edit" viewBox="0 0 16 16"><path d="M10.5 2.5 13.5 5.5 6 13H3v-3Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2.5 4.5h11M6 4.5V3h4v1.5M4 4.5l.7 9h6.6l.7-9"/></g></symbol>
+    <symbol id="i-folder" viewBox="0 0 16 16"><path d="M2 4.5A1.5 1.5 0 0 1 3.5 3h3l1.5 1.5h4.5A1.5 1.5 0 0 1 14 6v5.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11.5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-cloud-off" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4.5 12.5h7a3 3 0 0 0 .7-5.9A4.5 4.5 0 0 0 4 6.2a3.2 3.2 0 0 0 .5 6.3Z"/><path d="m2 2 12 12"/></g></symbol>
+  </defs>
+</svg>
+
+<div class="app">
+  <header class="titlebar">
+    <img src="../assets/icon/c3yptax-icon-32.png" alt="">
+    <span class="titlebar__name">C3 Manager</span>
+    <span class="titlebar__sep"></span>
+    <span class="titlebar__doc">Designvorschau</span>
+    <div class="titlebar__controls" aria-hidden="true">
+      <button class="winbtn" tabindex="-1"><svg viewBox="0 0 10 10"><path d="M0 5h10"/></svg></button>
+      <button class="winbtn" tabindex="-1"><svg viewBox="0 0 10 10"><rect x=".5" y=".5" width="9" height="9"/></svg></button>
+      <button class="winbtn winbtn--close" tabindex="-1"><svg viewBox="0 0 10 10"><path d="m0 0 10 10M10 0 0 10"/></svg></button>
+    </div>
+  </header>
+
+  <div class="body">
+    <aside class="sidebar">
+      <nav class="c3-nav" id="nav" aria-label="Hauptnavigation">
+        <span class="c3-nav__highlight" aria-hidden="true"></span>
+        <div class="c3-nav__section">Anwendung</div>
+        <button class="c3-nav__item" data-page="overview" aria-current="page"><svg class="c3-icon"><use href="#i-grid"/></svg>Übersicht<span class="c3-count" id="navCount">4</span></button>
+        <div class="c3-nav__section">Design-System</div>
+        <button class="c3-nav__item" data-page="foundations"><svg class="c3-icon"><use href="#i-palette"/></svg>Grundlagen</button>
+        <button class="c3-nav__item" data-page="components"><svg class="c3-icon"><use href="#i-blocks"/></svg>Komponenten</button>
+        <button class="c3-nav__item" data-page="motion"><svg class="c3-icon"><use href="#i-motion"/></svg>Bewegung</button>
+        <button class="c3-nav__item" data-page="brand"><svg class="c3-icon"><use href="#i-image"/></svg>Marke</button>
+      </nav>
+      <div class="sidebar__footer"><span class="dot"></span>Verbunden<span style="margin-left:auto">Version 1.0</span></div>
+    </aside>
+
+    <main class="main" id="main">
+
+      <!-- Übersicht ============================================================ -->
+      <section class="page c3-tabpanel" data-page-panel="overview">
+        <div class="page__header">
+          <div>
+            <h1 class="c3-title">Übersicht</h1>
+            <p>Profile, Geräte und letzte Aktivitäten</p>
+          </div>
+          <div class="page__actions">
+            <button class="c3-btn" data-toast="info" data-title="Export gestartet" data-text="Die Datei wird im Ordner Downloads gespeichert."><svg class="c3-icon"><use href="#i-download"/></svg>Exportieren</button>
+            <button class="c3-btn c3-btn--primary" data-open="dlgNew"><svg class="c3-icon"><use href="#i-plus"/></svg>Neues Profil</button>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="c3-card c3-card--interactive"><div class="stat__label">Aktive Profile</div><div class="stat__value" id="statProfiles">4</div><div class="stat__meta">1 Entwurf</div></div>
+          <div class="c3-card c3-card--interactive"><div class="stat__label">Verbundene Geräte</div><div class="stat__value"><span id="statDevices">1</span> <span class="c3-small">von 3</span></div><div class="stat__meta">Controller A aktiv</div></div>
+          <div class="c3-card c3-card--interactive"><div class="stat__label">Letzte Synchronisierung</div><div class="stat__value">09:42</div><div class="stat__meta stat__meta--ok">Erfolgreich</div></div>
+          <div class="c3-card c3-card--interactive"><div class="stat__label">Warnungen</div><div class="stat__value">1</div><div class="stat__meta">Firmware veraltet</div></div>
+        </div>
+
+        <div class="split">
+          <div class="c3-card table-card">
+            <div class="c3-tabs" data-tabs role="tablist" aria-label="Ansicht">
+              <button class="c3-tab" role="tab" aria-selected="true" aria-controls="tp-profiles">Profile</button>
+              <button class="c3-tab" role="tab" aria-selected="false" aria-controls="tp-devices">Geräte</button>
+              <button class="c3-tab" role="tab" aria-selected="false" aria-controls="tp-history">Verlauf</button>
+              <span class="c3-tabs__indicator"></span>
+            </div>
+
+            <div id="tp-profiles" class="c3-tabpanel" role="tabpanel">
+              <div class="toolbar">
+                <label class="c3-input-group">
+                  <svg class="c3-icon"><use href="#i-search"/></svg>
+                  <input class="c3-input" type="search" placeholder="Profile durchsuchen" aria-label="Profile durchsuchen" id="search">
+                </label>
+                <div class="c3-select" data-select>
+                  <button class="c3-select__button" aria-haspopup="listbox" aria-expanded="false"><span>Alle Status</span><svg class="c3-icon"><use href="#i-chevron"/></svg></button>
+                  <div class="c3-menu" role="listbox">
+                    <button class="c3-menu__item" role="option" aria-selected="true">Alle Status</button>
+                    <button class="c3-menu__item" role="option">Verbunden</button>
+                    <button class="c3-menu__item" role="option">Getrennt</button>
+                    <button class="c3-menu__item" role="option">Entwurf</button>
+                  </div>
+                </div>
+                <button class="c3-btn c3-btn--ghost c3-btn--sm toolbar__end" data-toast="success" data-title="Aktualisiert" data-text="Alle Profile sind auf dem neuesten Stand."><svg class="c3-icon"><use href="#i-refresh"/></svg>Aktualisieren</button>
+              </div>
+              <div class="table-wrap">
+                <table class="c3-table" id="profiles">
+                  <thead><tr><th>Name</th><th>Gerät</th><th>Status</th><th>Geändert</th><th><span class="c3-sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Aktionen</span></th></tr></thead>
+                  <tbody>
+                    <tr aria-selected="true"><td class="is-primary">Standardprofil</td><td><span class="cell-device"><svg class="c3-icon"><use href="#i-cpu"/></svg>Controller A</span></td><td><span class="c3-badge c3-badge--success">Verbunden</span></td><td>Heute, 09:42</td><td><div class="cell-actions"><button class="c3-btn c3-btn--ghost c3-btn--icon c3-btn--sm" data-menu aria-label="Weitere Aktionen"><svg class="c3-icon"><use href="#i-more"/></svg></button></div></td></tr>
+                    <tr><td class="is-primary">Präzision</td><td><span class="cell-device"><svg class="c3-icon"><use href="#i-cpu"/></svg>Controller B</span></td><td><span class="c3-badge" data-status>Getrennt</span></td><td>Gestern, 18:10</td><td><div class="cell-actions"><button class="c3-btn c3-btn--sm" data-check>Verbinden</button><button class="c3-btn c3-btn--ghost c3-btn--icon c3-btn--sm" data-menu aria-label="Weitere Aktionen"><svg class="c3-icon"><use href="#i-more"/></svg></button></div></td></tr>
+                    <tr><td class="is-primary">Streaming</td><td><span class="cell-device"><svg class="c3-icon"><use href="#i-cpu"/></svg>Controller C</span></td><td><span class="c3-badge c3-badge--warning">Firmware veraltet</span></td><td>12. Nov.</td><td><div class="cell-actions"><button class="c3-btn c3-btn--ghost c3-btn--icon c3-btn--sm" data-menu aria-label="Weitere Aktionen"><svg class="c3-icon"><use href="#i-more"/></svg></button></div></td></tr>
+                    <tr><td class="is-primary">Testlauf</td><td><span class="c3-small">Kein Gerät</span></td><td><span class="c3-badge">Entwurf</span></td><td>8. Nov.</td><td><div class="cell-actions"><button class="c3-btn c3-btn--ghost c3-btn--icon c3-btn--sm" data-menu aria-label="Weitere Aktionen"><svg class="c3-icon"><use href="#i-more"/></svg></button></div></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-foot"><span id="tableCount">4 Profile</span><span>Zeile anklicken zum Auswählen</span></div>
+            </div>
+
+            <div id="tp-devices" class="c3-tabpanel" role="tabpanel" hidden>
+              <div class="devices">
+                <div class="c3-card c3-card--interactive"><div class="device__top"><span class="device__name">Controller A</span><span class="c3-badge c3-badge--success">Verbunden</span></div><div class="c3-small">Firmware 2.4.1</div><div class="c3-code" style="margin-top:4px">COM4</div></div>
+                <div class="c3-card c3-card--interactive"><div class="device__top"><span class="device__name">Controller B</span><span class="c3-badge">Getrennt</span></div><div class="c3-small">Firmware 2.4.1</div><div class="c3-code" style="margin-top:4px">Nicht erkannt</div></div>
+                <div class="c3-card c3-card--interactive"><div class="device__top"><span class="device__name">Controller C</span><span class="c3-badge c3-badge--warning">Update</span></div><div class="c3-small">Firmware 2.2.0</div><div class="c3-code" style="margin-top:4px">COM7</div></div>
+              </div>
+            </div>
+
+            <div id="tp-history" class="c3-tabpanel" role="tabpanel" hidden>
+              <div class="c3-empty">
+                <div class="c3-empty__icon"><svg class="c3-icon"><use href="#i-list"/></svg></div>
+                <div class="c3-heading">Noch kein Verlauf</div>
+                <p>Sobald ein Profil verwendet wird, erscheinen die Sitzungen hier.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="c3-card">
+            <div class="c3-card__header"><div class="card-title">Aktivität</div><button class="c3-btn c3-btn--ghost c3-btn--sm" id="reloadActivity">Neu laden</button></div>
+            <div id="activity" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Grundlagen =========================================================== -->
+      <section class="page c3-tabpanel" data-page-panel="foundations" hidden>
+        <div class="page__header"><div><h1 class="c3-title">Grundlagen</h1><p>Farben, Schrift, Abstände und Radien. Alle Werte stammen aus tokens/tokens.json.</p></div></div>
+
+        <h2 class="section-title">Flächen und Rahmen</h2>
+        <div class="swatches" data-swatches="bg-canvas bg-subtle surface-card surface-input surface-popover surface-control surface-control-hover border-subtle border-default border-strong border-control"></div>
+        <h2 class="section-title">Text</h2>
+        <div class="swatches" data-swatches="text-primary text-secondary text-muted text-disabled text-on-accent"></div>
+        <h2 class="section-title">Akzent</h2>
+        <div class="swatches" data-swatches="accent-default accent-hover accent-pressed accent-text accent-subtle accent-border secondary-default"></div>
+        <h2 class="section-title">Status</h2>
+        <div class="swatches" data-swatches="status-success status-warning status-danger status-danger-solid status-success-subtle status-warning-subtle status-danger-subtle"></div>
+        <h2 class="section-title">Markenfarben, nur für Logo und Grafik</h2>
+        <div class="swatches" data-swatches="brand-cyan brand-teal brand-green brand-ice brand-glow brand-deep"></div>
+
+        <h2 class="section-title">Typografie</h2>
+        <div class="c3-card">
+          <div class="type-row"><span class="c3-caption">Display 28</span><span style="font:var(--c3-typography-display)">Alles bereit</span></div>
+          <div class="type-row"><span class="c3-caption">Titel 20</span><span class="c3-title">Profile verwalten</span></div>
+          <div class="type-row"><span class="c3-caption">Überschrift 16</span><span class="c3-heading">Verbindung</span></div>
+          <div class="type-row"><span class="c3-caption">Beschriftung 13</span><span class="c3-label">Gerätename</span></div>
+          <div class="type-row"><span class="c3-caption">Text 14</span><span>Das Profil wird beim nächsten Start automatisch geladen.</span></div>
+          <div class="type-row"><span class="c3-caption">Klein 13</span><span class="c3-small">Zuletzt geändert heute um 09:42</span></div>
+          <div class="type-row"><span class="c3-caption">Hinweis 12</span><span class="c3-caption">Version 1.0</span></div>
+          <div class="type-row"><span class="c3-caption">Code 13</span><span class="c3-code">%LOCALAPPDATA%\C3\profile.json</span></div>
+        </div>
+
+        <div class="grid-2" style="margin-top:var(--c3-space-8)">
+          <div>
+            <h2 class="section-title" style="margin-top:0">Abstände</h2>
+            <div class="c3-card stack" id="spaces"></div>
+          </div>
+          <div>
+            <h2 class="section-title" style="margin-top:0">Radien</h2>
+            <div class="c3-card row" style="gap:var(--c3-space-5)">
+              <div><div class="radius-box" style="border-radius:var(--c3-radius-xs)"></div><div class="c3-caption" style="margin-top:6px">xs 4</div></div>
+              <div><div class="radius-box" style="border-radius:var(--c3-radius-sm)"></div><div class="c3-caption" style="margin-top:6px">sm 6</div></div>
+              <div><div class="radius-box" style="border-radius:var(--c3-radius-md)"></div><div class="c3-caption" style="margin-top:6px">md 8</div></div>
+              <div><div class="radius-box" style="border-radius:var(--c3-radius-lg)"></div><div class="c3-caption" style="margin-top:6px">lg 10</div></div>
+              <div><div class="radius-box" style="border-radius:var(--c3-radius-xl)"></div><div class="c3-caption" style="margin-top:6px">xl 14</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Komponenten ========================================================== -->
+      <section class="page c3-tabpanel" data-page-panel="components" hidden>
+        <div class="page__header"><div><h1 class="c3-title">Komponenten</h1><p>Alle Elemente sind bedienbar. Tastatur und Fokus funktionieren wie in der fertigen Anwendung.</p></div></div>
+
+        <div class="grid-2">
+          <div class="c3-card stack">
+            <div><div class="card-title">Buttons</div><div class="card-sub">Eine Hauptaktion pro Bereich</div></div>
+            <div class="row">
+              <button class="c3-btn c3-btn--primary">Speichern</button>
+              <button class="c3-btn">Abbrechen</button>
+              <button class="c3-btn c3-btn--ghost">Zurücksetzen</button>
+              <button class="c3-btn c3-btn--danger" data-open="dlgDelete">Löschen</button>
+            </div>
+            <div class="row">
+              <button class="c3-btn c3-btn--primary" id="busyBtn">Synchronisieren</button>
+              <button class="c3-btn" disabled>Deaktiviert</button>
+              <span class="c3-tooltip"><button class="c3-btn c3-btn--icon" aria-label="Kopieren"><svg class="c3-icon"><use href="#i-copy"/></svg></button><span class="c3-tooltip__bubble">Kopieren</span></span>
+              <span class="c3-tooltip"><button class="c3-btn c3-btn--icon c3-btn--ghost" aria-label="Bearbeiten"><svg class="c3-icon"><use href="#i-edit"/></svg></button><span class="c3-tooltip__bubble">Bearbeiten</span></span>
+            </div>
+            <div class="row">
+              <button class="c3-btn c3-btn--primary c3-btn--sm">Klein 28</button>
+              <button class="c3-btn c3-btn--primary">Standard 32</button>
+              <button class="c3-btn c3-btn--primary c3-btn--lg">Groß 40</button>
+            </div>
+          </div>
+
+          <div class="c3-card stack">
+            <div><div class="card-title">Eingabefelder</div><div class="card-sub">Beschriftung immer über dem Feld</div></div>
+            <label class="c3-field"><span class="c3-label">Profilname</span><input class="c3-input" value="Standardprofil"></label>
+            <label class="c3-field"><span class="c3-label">Speicherort</span><input class="c3-input" placeholder="Ordner auswählen"><span class="c3-field__hint">Leer lassen für den Standardordner</span></label>
+            <label class="c3-field"><span class="c3-label">Port</span><input class="c3-input" value="COM99" aria-invalid="true"><span class="c3-field__error"><svg class="c3-icon"><use href="#i-error"/></svg>Dieser Port ist nicht verfügbar.</span></label>
+            <label class="c3-field"><span class="c3-label">Seriennummer</span><input class="c3-input" value="Wird automatisch erkannt" disabled></label>
+          </div>
+
+          <div class="c3-card stack">
+            <div><div class="card-title">Auswahl</div><div class="card-sub">Dropdown, Checkbox, Radio, Schalter</div></div>
+            <div class="c3-field">
+              <span class="c3-label" id="lblLang">Sprache</span>
+              <div class="c3-select" data-select>
+                <button class="c3-select__button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="lblLang"><span>Deutsch</span><svg class="c3-icon"><use href="#i-chevron"/></svg></button>
+                <div class="c3-menu" role="listbox">
+                  <button class="c3-menu__item" role="option" aria-selected="true">Deutsch</button>
+                  <button class="c3-menu__item" role="option">English</button>
+                  <button class="c3-menu__item" role="option">Français</button>
+                </div>
+              </div>
+            </div>
+            <div class="row" style="gap:var(--c3-space-5)">
+              <label class="c3-check"><input type="checkbox" checked><span class="c3-check__box"><svg viewBox="0 0 12 12"><path d="m2.5 6.2 2.3 2.3 4.7-5"/></svg></span>Beim Start laden</label>
+              <label class="c3-check"><input type="checkbox"><span class="c3-check__box"><svg viewBox="0 0 12 12"><path d="m2.5 6.2 2.3 2.3 4.7-5"/></svg></span>Protokoll speichern</label>
+              <label class="c3-check"><input type="checkbox" disabled><span class="c3-check__box"><svg viewBox="0 0 12 12"><path d="m2.5 6.2 2.3 2.3 4.7-5"/></svg></span>Nicht verfügbar</label>
+            </div>
+            <div class="row" style="gap:var(--c3-space-5)" role="radiogroup" aria-label="Modus">
+              <label class="c3-check c3-check--radio"><input type="radio" name="mode" checked><span class="c3-check__box"></span>Automatisch</label>
+              <label class="c3-check c3-check--radio"><input type="radio" name="mode"><span class="c3-check__box"></span>Manuell</label>
+            </div>
+            <div class="row" style="justify-content:space-between">
+              <label class="c3-switch"><input type="checkbox" checked><span class="c3-switch__track"></span>Benachrichtigungen</label>
+              <div class="c3-segmented" data-segmented>
+                <span class="c3-segmented__thumb"></span>
+                <button aria-pressed="true">Tag</button><button aria-pressed="false">Woche</button><button aria-pressed="false">Monat</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="c3-card stack">
+            <div><div class="card-title">Status</div><div class="card-sub">Farbe plus Text, nie Farbe allein</div></div>
+            <div class="row">
+              <span class="c3-badge c3-badge--success">Verbunden</span>
+              <span class="c3-badge c3-badge--warning">Update verfügbar</span>
+              <span class="c3-badge c3-badge--danger">Fehler</span>
+              <span class="c3-badge c3-badge--info">Neu</span>
+              <span class="c3-badge">Entwurf</span>
+            </div>
+            <div class="c3-alert"><svg class="c3-icon"><use href="#i-info"/></svg><div><div class="c3-alert__title">Neue Version verfügbar</div><div class="c3-alert__text">Version 1.1 wird beim nächsten Start installiert.</div></div></div>
+            <div class="c3-alert c3-alert--warning"><svg class="c3-icon"><use href="#i-alert"/></svg><div><div class="c3-alert__title">Firmware veraltet</div><div class="c3-alert__text">Controller C nutzt Version 2.2.0. Empfohlen ist 2.4.1.</div></div></div>
+            <div class="c3-alert c3-alert--danger"><svg class="c3-icon"><use href="#i-error"/></svg><div><div class="c3-alert__title">Verbindung verloren</div><div class="c3-alert__text">Controller B antwortet nicht. Prüfe das USB-Kabel.</div></div></div>
+          </div>
+
+          <div class="c3-card stack">
+            <div><div class="card-title">Laden und Fortschritt</div><div class="card-sub">Gleichmäßig, ohne Hektik</div></div>
+            <div>
+              <div class="row" style="justify-content:space-between;margin-bottom:8px"><span class="c3-label">Firmware wird übertragen</span><span class="c3-caption" id="progressText">0 %</span></div>
+              <div class="c3-progress"><div class="c3-progress__bar" id="progressBar"></div></div>
+            </div>
+            <div>
+              <div class="c3-label" style="margin-bottom:8px">Geräte werden gesucht</div>
+              <div class="c3-progress c3-progress--indeterminate"><div class="c3-progress__bar"></div></div>
+            </div>
+            <div class="row" style="gap:var(--c3-space-4)">
+              <span class="row c3-small" style="color:var(--c3-color-accent-text)"><span class="c3-spinner"></span>Wird geladen</span>
+              <button class="c3-btn c3-btn--sm" id="progressBtn">Fortschritt starten</button>
+            </div>
+            <div class="stack" style="gap:var(--c3-space-2)">
+              <span class="c3-skeleton" style="width:60%"></span>
+              <span class="c3-skeleton" style="width:85%"></span>
+              <span class="c3-skeleton" style="width:40%"></span>
+            </div>
+          </div>
+
+          <div class="c3-card stack">
+            <div><div class="card-title">Benachrichtigungen und Dialoge</div><div class="card-sub">Erscheinen unten rechts und verschwinden nach fünf Sekunden</div></div>
+            <div class="row">
+              <button class="c3-btn" data-toast="success" data-title="Gespeichert" data-text="Die Einstellungen wurden übernommen.">Erfolg</button>
+              <button class="c3-btn" data-toast="info" data-title="Hinweis" data-text="Ein Neustart ist nicht erforderlich.">Hinweis</button>
+              <button class="c3-btn" data-toast="warning" data-title="Akku schwach" data-text="Controller A hat noch 15 Prozent.">Warnung</button>
+              <button class="c3-btn" data-toast="danger" data-title="Speichern fehlgeschlagen" data-text="Der Ordner ist schreibgeschützt.">Fehler</button>
+            </div>
+            <hr class="c3-divider" style="margin:0">
+            <div class="row">
+              <button class="c3-btn c3-btn--primary" data-open="dlgNew">Dialog öffnen</button>
+              <button class="c3-btn c3-btn--danger" data-open="dlgDelete">Löschen bestätigen</button>
+              <div style="position:relative">
+                <button class="c3-btn" data-menu>Menü<svg class="c3-icon"><use href="#i-chevron"/></svg></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="c3-card">
+            <div style="margin-bottom:var(--c3-space-2)"><div class="card-title">Aufklappbare Bereiche</div></div>
+            <div class="c3-disclosure">
+              <button class="c3-disclosure__button" aria-expanded="true">Erweiterte Einstellungen<svg class="c3-icon"><use href="#i-chevron"/></svg></button>
+              <div class="c3-disclosure__panel"><div><div class="c3-disclosure__content">Diese Optionen sind für die meisten Nutzer nicht nötig. Änderungen gelten erst nach dem Speichern.</div></div></div>
+            </div>
+            <div class="c3-disclosure">
+              <button class="c3-disclosure__button" aria-expanded="false">Protokollierung<svg class="c3-icon"><use href="#i-chevron"/></svg></button>
+              <div class="c3-disclosure__panel"><div><div class="c3-disclosure__content">Protokolle werden sieben Tage aufbewahrt und danach automatisch gelöscht.</div></div></div>
+            </div>
+            <div class="c3-disclosure" style="border-bottom:0">
+              <button class="c3-disclosure__button" aria-expanded="false">Über diese Anwendung<svg class="c3-icon"><use href="#i-chevron"/></svg></button>
+              <div class="c3-disclosure__panel"><div><div class="c3-disclosure__content">C3 Manager ist eine Beispielanwendung des C3yPTaX Design Systems.</div></div></div>
+            </div>
+          </div>
+
+          <div class="c3-card" style="padding:0">
+            <div class="c3-empty">
+              <div class="c3-empty__icon c3-empty__icon--danger"><svg class="c3-icon"><use href="#i-cloud-off"/></svg></div>
+              <div class="c3-heading">Daten konnten nicht geladen werden</div>
+              <p>Der Server ist nicht erreichbar. Deine Änderungen bleiben lokal gespeichert.</p>
+              <button class="c3-btn c3-btn--sm" style="margin-top:var(--c3-space-2)" data-toast="success" data-title="Verbunden" data-text="Die Daten wurden geladen.">Erneut versuchen</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bewegung ============================================================= -->
+      <section class="page c3-tabpanel" data-page-panel="motion" hidden>
+        <div class="page__header"><div><h1 class="c3-title">Bewegung</h1><p>Kurz, weich und nur dort, wo sie etwas erklärt.</p></div>
+          <label class="c3-switch"><input type="checkbox" id="reduceMotion"><span class="c3-switch__track"></span>Reduzierte Bewegung simulieren</label>
+        </div>
+
+        <h2 class="section-title">Dauer</h2>
+        <div class="c3-card">
+          <div class="motion-row"><span class="c3-label">Sofort</span><span class="c3-code">80 ms</span><div class="hover-chip" style="transition-duration:var(--c3-motion-duration-instant)">Mit der Maus darüberfahren</div></div>
+          <div class="motion-row"><span class="c3-label">Schnell</span><span class="c3-code">120 ms</span><div class="hover-chip" style="transition-duration:var(--c3-motion-duration-fast)">Hover, Fokus, Checkbox</div></div>
+          <div class="motion-row"><span class="c3-label">Normal</span><span class="c3-code">180 ms</span><div class="hover-chip" style="transition-duration:var(--c3-motion-duration-normal)">Tabs, Dropdowns, Status</div></div>
+          <div class="motion-row"><span class="c3-label">Langsam</span><span class="c3-code">250 ms</span><div class="hover-chip" style="transition-duration:var(--c3-motion-duration-slow)">Dialoge, Toasts, Bereiche</div></div>
+        </div>
+
+        <h2 class="section-title">Verlauf der Beschleunigung</h2>
+        <div class="c3-card">
+          <div class="motion-row"><span class="c3-label">Standard</span><span class="c3-code">0.2, 0, 0, 1</span><div class="track" data-ease="standard"><span class="track__dot"></span></div></div>
+          <div class="motion-row"><span class="c3-label">Erscheinen</span><span class="c3-code">0.16, 1, 0.3, 1</span><div class="track" data-ease="enter"><span class="track__dot"></span></div></div>
+          <div class="motion-row"><span class="c3-label">Verschwinden</span><span class="c3-code">0.4, 0, 1, 1</span><div class="track" data-ease="exit"><span class="track__dot"></span></div></div>
+          <div class="motion-row"><span class="c3-label">Linear</span><span class="c3-code">nur Fortschritt</span><div class="track" data-ease="linear"><span class="track__dot"></span></div></div>
+          <div class="row" style="margin-top:var(--c3-space-4)"><button class="c3-btn c3-btn--sm" id="playEase">Abspielen</button><span class="c3-caption">Alle Punkte laufen 250 ms. Der Weg ist hier absichtlich lang, damit der Verlauf sichtbar wird.</span></div>
+        </div>
+
+        <h2 class="section-title">Zum Ausprobieren</h2>
+        <div class="grid-3">
+          <div class="c3-card c3-card--interactive"><div class="card-title">Karte</div><div class="card-sub">Hebt sich 2 px an</div></div>
+          <div class="c3-card stack"><div class="card-title">Dialog</div><button class="c3-btn c3-btn--primary c3-btn--sm" data-open="dlgNew" style="justify-self:start">Öffnen</button></div>
+          <div class="c3-card stack"><div class="card-title">Toast</div><button class="c3-btn c3-btn--sm" data-toast="success" data-title="Gespeichert" data-text="Alles erledigt." style="justify-self:start">Anzeigen</button></div>
+        </div>
+      </section>
+
+      <!-- Marke ================================================================ -->
+      <section class="page c3-tabpanel" data-page-panel="brand" hidden>
+        <div class="page__header"><div><h1 class="c3-title">Marke</h1><p>Das Logo darf auffallen. Die Oberfläche hält sich zurück.</p></div></div>
+
+        <div class="grid-2">
+          <div class="c3-card stack">
+            <div><div class="card-title">Hauptlogo</div><div class="card-sub">Startbildschirm, Über-Dialog, Dokumentation</div></div>
+            <div class="brand-tile"><img src="../assets/logo/c3yptax-logo-512.png" alt="C3yPTaX Logo mit Schriftzug" width="260" height="260" loading="lazy"></div>
+          </div>
+          <div class="c3-card stack">
+            <div><div class="card-title">Kompaktlogo</div><div class="card-sub">Wenn wenig Platz ist oder der Name bereits sichtbar ist</div></div>
+            <div class="brand-tile"><img src="../assets/mark/c3yptax-mark-256.png" alt="C3 Kompaktlogo" width="200" height="200" loading="lazy"></div>
+          </div>
+        </div>
+
+        <h2 class="section-title">Programmicon</h2>
+        <div class="c3-card stack">
+          <div class="icon-row" id="iconRow"></div>
+          <ul class="rules">
+            <li><svg class="c3-icon yes"><use href="#i-check"/></svg>Bis 32 px nur die Buchstaben, ab 40 px mit Rahmen. Beides steckt in c3yptax.ico.</li>
+            <li><svg class="c3-icon yes"><use href="#i-check"/></svg>Für EXE, Taskleiste und Fenstertitel verwenden.</li>
+            <li><svg class="c3-icon no"><use href="#i-x"/></svg>Kein eigenes Symbol für Ordner wie App.</li>
+          </ul>
+        </div>
+
+        <div class="grid-2" style="margin-top:var(--c3-space-4)">
+          <div class="c3-card stack">
+            <div><div class="card-title">Profilbild</div><div class="card-sub">Quadratisch, verträgt runde Masken</div></div>
+            <div class="row" style="gap:var(--c3-space-5)">
+              <img src="../assets/profile/c3yptax-avatar-256.jpg" alt="Profilbild" width="96" height="96" style="border-radius:50%" loading="lazy">
+              <img src="../assets/profile/c3yptax-avatar-256.jpg" alt="" width="48" height="48" style="border-radius:50%" loading="lazy">
+              <img src="../assets/profile/c3yptax-avatar-256.jpg" alt="" width="32" height="32" style="border-radius:50%" loading="lazy">
+            </div>
+          </div>
+          <div class="c3-card stack">
+            <div><div class="card-title">Wallpaper</div><div class="card-sub">Desktop, Präsentationen, Splash</div></div>
+            <img src="../assets/originals/c3yptax-wallpaper-1920x1080.webp" alt="C3yPTaX Wallpaper" style="width:100%;height:auto;border-radius:var(--c3-radius-md)" loading="lazy">
+            <ul class="rules">
+              <li><svg class="c3-icon no"><use href="#i-x"/></svg>Nie als Hintergrund hinter Formularen oder Tabellen.</li>
+              <li><svg class="c3-icon no"><use href="#i-x"/></svg>Nie als Programmicon.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- Dialoge -->
+<div class="c3-overlay" id="dlgNew" aria-hidden="true">
+  <div class="c3-dialog" role="dialog" aria-modal="true" aria-labelledby="dlgNewTitle">
+    <form id="formNew" novalidate>
+      <div class="c3-dialog__header">
+        <div><h2 class="c3-heading" id="dlgNewTitle">Neues Profil</h2><p class="c3-small" style="margin-top:4px">Das Profil kann später jederzeit geändert werden.</p></div>
+        <button type="button" class="c3-btn c3-btn--ghost c3-btn--icon c3-btn--sm" data-close aria-label="Schließen"><svg class="c3-icon"><use href="#i-x"/></svg></button>
+      </div>
+      <div class="c3-dialog__body">
+        <label class="c3-field"><span class="c3-label">Name</span><input class="c3-input" id="newName" placeholder="Zum Beispiel Turnier" autocomplete="off"><span class="c3-field__error" id="newNameError" hidden><svg class="c3-icon"><use href="#i-error"/></svg>Bitte einen Namen eingeben.</span></label>
+        <div class="c3-field">
+          <span class="c3-label" id="lblDevice">Gerät</span>
+          <div class="c3-select" data-select id="newDevice">
+            <button type="button" class="c3-select__button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="lblDevice"><span>Controller A</span><svg class="c3-icon"><use href="#i-chevron"/></svg></button>
+            <div class="c3-menu" role="listbox">
+              <button type="button" class="c3-menu__item" role="option" aria-selected="true">Controller A</button>
+              <button type="button" class="c3-menu__item" role="option">Controller B</button>
+              <button type="button" class="c3-menu__item" role="option">Controller C</button>
+            </div>
+          </div>
+        </div>
+        <label class="c3-check"><input type="checkbox" checked><span class="c3-check__box"><svg viewBox="0 0 12 12"><path d="m2.5 6.2 2.3 2.3 4.7-5"/></svg></span>Als Standard verwenden</label>
+      </div>
+      <div class="c3-dialog__footer">
+        <button type="button" class="c3-btn" data-close>Abbrechen</button>
+        <button type="submit" class="c3-btn c3-btn--primary">Profil anlegen</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="c3-overlay" id="dlgDelete" aria-hidden="true">
+  <div class="c3-dialog" role="alertdialog" aria-modal="true" aria-labelledby="dlgDelTitle" aria-describedby="dlgDelText" style="width:min(400px,100%)">
+    <div class="c3-dialog__header"><h2 class="c3-heading" id="dlgDelTitle">Profil löschen?</h2></div>
+    <div class="c3-dialog__body"><p class="c3-small" id="dlgDelText" style="color:var(--c3-color-text-secondary)">Das Profil Testlauf wird dauerhaft entfernt. Das lässt sich nicht rückgängig machen.</p></div>
+    <div class="c3-dialog__footer">
+      <button type="button" class="c3-btn" data-close>Abbrechen</button>
+      <button type="button" class="c3-btn c3-btn--danger" data-close data-toast="success" data-title="Gelöscht" data-text="Das Profil Testlauf wurde entfernt.">Löschen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Kontextmenü, wird an den auslösenden Button gehängt -->
+<div class="c3-menu c3-menu--end" id="ctxMenu" role="menu" style="min-width:200px">
+  <button class="c3-menu__item" role="menuitem"><svg class="c3-icon"><use href="#i-edit"/></svg>Bearbeiten<kbd>F2</kbd></button>
+  <button class="c3-menu__item" role="menuitem"><svg class="c3-icon"><use href="#i-copy"/></svg>Duplizieren<kbd>Strg+D</kbd></button>
+  <button class="c3-menu__item" role="menuitem"><svg class="c3-icon"><use href="#i-folder"/></svg>Im Ordner anzeigen</button>
+  <div class="c3-menu__sep"></div>
+  <button class="c3-menu__item c3-menu__item--danger" role="menuitem" data-open="dlgDelete"><svg class="c3-icon"><use href="#i-trash"/></svg>Löschen<kbd>Entf</kbd></button>
+</div>
+
+<div class="c3-toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const icon = id => `<svg class="c3-icon"><use href="#${id}"/></svg>`;
+
+  function enter(panel) {
+    panel.hidden = false;
+    panel.classList.remove('is-entering');
+    void panel.offsetWidth;
+    panel.classList.add('is-entering');
+  }
+
+  /* Seitenleiste */
+  const nav = $('#nav'), hl = $('.c3-nav__highlight', nav);
+  function placeHighlight(btn, instant) {
+    if (instant) hl.style.transition = 'none';
+    hl.style.transform = `translateY(${btn.offsetTop}px)`;
+    if (instant) { void hl.offsetWidth; hl.style.transition = ''; }
+  }
+  $$('.c3-nav__item', nav).forEach(btn => btn.addEventListener('click', () => {
+    $$('.c3-nav__item', nav).forEach(b => b.removeAttribute('aria-current'));
+    btn.setAttribute('aria-current', 'page');
+    placeHighlight(btn);
+    $$('[data-page-panel]').forEach(p => { p.hidden = true; });
+    enter($(`[data-page-panel="${btn.dataset.page}"]`));
+    $('#main').scrollTop = 0;
+    layoutIndicators();
+  }));
+  placeHighlight($('[aria-current="page"]', nav), true);
+
+  /* Tabs */
+  function moveIndicator(tabs) {
+    const sel = $('[aria-selected="true"]', tabs), ind = $('.c3-tabs__indicator', tabs);
+    if (!sel || !sel.offsetWidth) return;
+    ind.style.width = sel.offsetWidth + 'px';
+    ind.style.transform = `translateX(${sel.offsetLeft}px)`;
+  }
+  $$('[data-tabs]').forEach(tabs => {
+    const list = $$('[role="tab"]', tabs);
+    list.forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        list.forEach(t => { t.setAttribute('aria-selected', 'false'); t.tabIndex = -1; $('#' + t.getAttribute('aria-controls')).hidden = true; });
+        tab.setAttribute('aria-selected', 'true'); tab.tabIndex = 0;
+        enter($('#' + tab.getAttribute('aria-controls')));
+        moveIndicator(tabs);
+      });
+      tab.addEventListener('keydown', e => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (d) { const n = list[(i + d + list.length) % list.length]; n.focus(); n.click(); }
+      });
+      tab.tabIndex = tab.getAttribute('aria-selected') === 'true' ? 0 : -1;
+    });
+  });
+
+  /* Segmentierte Auswahl */
+  function moveThumb(seg) {
+    const on = $('[aria-pressed="true"]', seg), th = $('.c3-segmented__thumb', seg);
+    if (!on || !on.offsetWidth) return;
+    th.style.width = on.offsetWidth + 'px';
+    th.style.transform = `translateX(${on.offsetLeft}px)`;
+  }
+  $$('[data-segmented]').forEach(seg => $$('button', seg).forEach(b => b.addEventListener('click', () => {
+    $$('button', seg).forEach(x => x.setAttribute('aria-pressed', 'false'));
+    b.setAttribute('aria-pressed', 'true'); moveThumb(seg);
+  })));
+
+  function layoutIndicators() {
+    requestAnimationFrame(() => { $$('[data-tabs]').forEach(moveIndicator); $$('[data-segmented]').forEach(moveThumb); });
+  }
+  window.addEventListener('resize', layoutIndicators);
+  layoutIndicators();
+
+  /* Popover: Dropdowns und Kontextmenü */
+  let openMenu = null, openTrigger = null;
+  function closeMenu() {
+    if (!openMenu) return;
+    openMenu.classList.remove('is-open');
+    if (openTrigger) openTrigger.setAttribute('aria-expanded', 'false');
+    openMenu = openTrigger = null;
+  }
+  function showMenu(menu, trigger) {
+    closeMenu();
+    menu.classList.add('is-open');
+    trigger.setAttribute('aria-expanded', 'true');
+    openMenu = menu; openTrigger = trigger;
+    const first = $('[aria-selected="true"]', menu) || $('.c3-menu__item', menu);
+    if (first) first.focus({ preventScroll: true });
+  }
+  $$('[data-select]').forEach(sel => {
+    const btn = $('.c3-select__button', sel), menu = $('.c3-menu', sel);
+    btn.addEventListener('click', e => { e.stopPropagation(); openMenu === menu ? closeMenu() : showMenu(menu, btn); });
+    $$('.c3-menu__item', menu).forEach(item => item.addEventListener('click', e => {
+      e.stopPropagation();
+      $$('.c3-menu__item', menu).forEach(i => i.removeAttribute('aria-selected'));
+      item.setAttribute('aria-selected', 'true');
+      $('span', btn).textContent = item.textContent;
+      closeMenu(); btn.focus();
+      if (sel.closest('.toolbar')) filterTable();
+    }));
+  });
+  const ctx = $('#ctxMenu');
+  $$('[data-menu]').forEach(btn => {
+    btn.setAttribute('aria-haspopup', 'menu'); btn.setAttribute('aria-expanded', 'false');
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (openMenu === ctx && openTrigger === btn) return closeMenu();
+      // Fest positioniert, damit scrollende Container das Menü nicht abschneiden
+      const r = btn.getBoundingClientRect(), w = ctx.offsetWidth, h = ctx.offsetHeight;
+      const below = r.bottom + 4 + h < innerHeight;
+      ctx.style.transformOrigin = below ? 'top right' : 'bottom right';
+      ctx.style.left = Math.max(8, Math.min(r.right - w, innerWidth - w - 8)) + 'px';
+      ctx.style.top = (below ? r.bottom + 4 : r.top - 4 - h) + 'px';
+      showMenu(ctx, btn);
+    });
+  });
+  $$('.c3-menu__item', ctx).forEach(i => i.addEventListener('click', () => closeMenu()));
+  document.addEventListener('click', e => { if (openMenu && !openMenu.contains(e.target)) closeMenu(); });
+  $('#main').addEventListener('scroll', () => { if (openMenu === ctx) closeMenu(); }, { passive: true });
+  document.addEventListener('keydown', e => {
+    if (!openMenu) return;
+    const items = $$('.c3-menu__item', openMenu), idx = items.indexOf(document.activeElement);
+    if (e.key === 'Escape') { const t = openTrigger; closeMenu(); t && t.focus(); e.stopPropagation(); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); items[(idx + 1) % items.length].focus(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); items[(idx - 1 + items.length) % items.length].focus(); }
+  }, true);
+
+  /* Dialoge */
+  let lastFocus = null;
+  function openDialog(id) {
+    closeMenu();
+    const ov = $('#' + id);
+    lastFocus = document.activeElement;
+    ov.classList.add('is-open'); ov.setAttribute('aria-hidden', 'false');
+    setTimeout(() => { const f = $('input, button:not([data-close])', ov) || $('button', ov); f && f.focus(); }, 40);
+  }
+  function closeDialog(ov) {
+    ov.classList.remove('is-open'); ov.setAttribute('aria-hidden', 'true');
+    if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
+  }
+  document.addEventListener('click', e => {
+    const o = e.target.closest('[data-open]');
+    if (o) { e.stopPropagation(); openDialog(o.dataset.open); }
+    const c = e.target.closest('[data-close]');
+    if (c) closeDialog(c.closest('.c3-overlay'));
+  });
+  $$('.c3-overlay').forEach(ov => ov.addEventListener('mousedown', e => { if (e.target === ov) closeDialog(ov); }));
+  document.addEventListener('keydown', e => {
+    const ov = $('.c3-overlay.is-open');
+    if (!ov) return;
+    if (e.key === 'Escape') closeDialog(ov);
+    if (e.key === 'Tab') {
+      const f = $$('button, input, [tabindex="0"]', ov).filter(x => !x.disabled && x.offsetParent);
+      if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+    }
+  });
+
+  /* Toasts */
+  const toastIcons = { success: ['i-ok', 'var(--c3-color-status-success)'], info: ['i-info', 'var(--c3-color-accent-text)'], warning: ['i-alert', 'var(--c3-color-status-warning)'], danger: ['i-error', 'var(--c3-color-status-danger)'] };
+  function toast(type, title, text) {
+    const [ic, col] = toastIcons[type] || toastIcons.info;
+    const el = document.createElement('div');
+    el.className = 'c3-toast'; el.setAttribute('role', type === 'danger' ? 'alert' : 'status');
+    el.innerHTML = `<svg class="c3-icon" style="color:${col}"><use href="#${ic}"/></svg><div class="c3-toast__body"><div class="c3-toast__title"></div><div class="c3-toast__text"></div></div><button class="c3-btn c3-btn--ghost c3-btn--icon c3-btn--sm" aria-label="Schließen">${icon('i-x')}</button>`;
+    $('.c3-toast__title', el).textContent = title; $('.c3-toast__text', el).textContent = text;
+    const remove = () => { el.classList.add('is-leaving'); el.addEventListener('animationend', () => el.remove(), { once: true }); };
+    $('button', el).addEventListener('click', remove);
+    $('#toasts').appendChild(el);
+    while ($('#toasts').children.length > 3) $('#toasts').firstElementChild.remove();
+    setTimeout(remove, 5000);
+  }
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-toast]');
+    if (t) toast(t.dataset.toast, t.dataset.title, t.dataset.text);
+  });
+
+  /* Aufklappbare Bereiche */
+  $$('.c3-disclosure__button').forEach(b => b.addEventListener('click', () =>
+    b.setAttribute('aria-expanded', b.getAttribute('aria-expanded') === 'true' ? 'false' : 'true')));
+
+  /* Tabelle: Auswahl, Filter, Status */
+  const tbody = $('#profiles tbody');
+  tbody.addEventListener('click', e => {
+    if (e.target.closest('button')) return;
+    const tr = e.target.closest('tr'); if (!tr) return;
+    $$('tr', tbody).forEach(r => r.removeAttribute('aria-selected'));
+    tr.setAttribute('aria-selected', 'true');
+  });
+  function filterTable() {
+    const q = $('#search').value.trim().toLowerCase();
+    const st = $('.toolbar [aria-selected="true"]').textContent;
+    let n = 0;
+    $$('tr', tbody).forEach(r => {
+      const badge = $('.c3-badge', r).textContent;
+      const ok = r.textContent.toLowerCase().includes(q) && (st === 'Alle Status' || badge === st);
+      r.hidden = !ok; if (ok) n++;
+    });
+    $('#tableCount').textContent = n === 1 ? '1 Profil' : `${n} Profile`;
+  }
+  $('#search').addEventListener('input', filterTable);
+
+  function setBadge(b, cls, text) {
+    b.className = 'c3-badge ' + cls; b.textContent = text;
+    void b.offsetWidth; b.classList.add('is-changed');
+  }
+  $$('[data-check]').forEach(btn => btn.addEventListener('click', () => {
+    const b = $('[data-status]', btn.closest('tr'));
+    btn.disabled = true; btn.setAttribute('aria-busy', 'true');
+    btn.innerHTML = '<span class="c3-spinner"></span>Verbinde';
+    setBadge(b, 'c3-badge--info', 'Wird verbunden');
+    setTimeout(() => {
+      setBadge(b, 'c3-badge--success', 'Verbunden');
+      btn.remove();
+      $('#statDevices').textContent = '2';
+      toast('success', 'Controller B verbunden', 'Das Profil Präzision ist einsatzbereit.');
+    }, 1400);
+  }));
+
+  /* Neues Profil */
+  $('#formNew').addEventListener('submit', e => {
+    e.preventDefault();
+    const inp = $('#newName'), err = $('#newNameError'), name = inp.value.trim();
+    if (!name) { inp.setAttribute('aria-invalid', 'true'); err.hidden = false; inp.focus(); return; }
+    inp.removeAttribute('aria-invalid'); err.hidden = true;
+    const dev = $('#newDevice [aria-selected="true"]').textContent;
+    const tr = document.createElement('tr');
+    tr.className = 'is-new';
+    tr.innerHTML = `<td class="is-primary"></td><td><span class="cell-device">${icon('i-cpu')}<span></span></span></td><td><span class="c3-badge c3-badge--info">Neu</span></td><td>Gerade eben</td><td><div class="cell-actions"><button class="c3-btn c3-btn--ghost c3-btn--icon c3-btn--sm" aria-label="Weitere Aktionen">${icon('i-more')}</button></div></td>`;
+    $('td', tr).textContent = name; $('.cell-device span', tr).textContent = dev;
+    tbody.prepend(tr);
+    const count = tbody.rows.length;
+    $('#statProfiles').textContent = count; $('#navCount').textContent = count; filterTable();
+    closeDialog($('#dlgNew')); inp.value = '';
+    toast('success', 'Profil angelegt', `${name} wurde hinzugefügt.`);
+  });
+  $('#newName').addEventListener('input', e => { if (e.target.value.trim()) { e.target.removeAttribute('aria-invalid'); $('#newNameError').hidden = true; } });
+
+  /* Aktivität mit Ladezustand */
+  const activity = [
+    ['activity__icon--ok', 'i-ok', '<strong>Synchronisierung</strong> erfolgreich abgeschlossen', '09:42'],
+    ['', 'i-edit', '<strong>Standardprofil</strong> wurde geändert', '09:15'],
+    ['activity__icon--warn', 'i-alert', '<strong>Controller C</strong> braucht ein Update', 'Gestern'],
+    ['', 'i-plus', '<strong>Testlauf</strong> als Entwurf angelegt', '8. Nov.'],
+  ];
+  function loadActivity() {
+    const box = $('#activity');
+    box.innerHTML = Array.from({ length: 4 }, () => '<div class="skeleton-row"><span class="c3-skeleton" style="width:28px;height:28px;border-radius:6px"></span><div style="flex:1;display:grid;gap:6px"><span class="c3-skeleton" style="width:80%"></span><span class="c3-skeleton" style="width:40%;height:10px"></span></div></div>').join('');
+    setTimeout(() => {
+      box.innerHTML = `<div class="c3-list fade-in">${activity.map(([c, i, t, time]) => `<div class="c3-list__item"><span class="activity__icon ${c}">${icon(i)}</span><span class="activity__text">${t}</span><span class="activity__time">${time}</span></div>`).join('')}</div>`;
+    }, 1100);
+  }
+  $('#reloadActivity').addEventListener('click', loadActivity);
+  loadActivity();
+
+  /* Button mit Ladezustand */
+  $('#busyBtn').addEventListener('click', e => {
+    const b = e.currentTarget, label = b.textContent;
+    b.setAttribute('aria-busy', 'true'); b.disabled = true;
+    b.innerHTML = '<span class="c3-spinner"></span>Wird synchronisiert';
+    setTimeout(() => { b.removeAttribute('aria-busy'); b.disabled = false; b.textContent = label; toast('success', 'Synchronisiert', 'Alle Geräte sind auf dem neuesten Stand.'); }, 1600);
+  });
+
+  /* Fortschritt */
+  let timer = null;
+  $('#progressBtn').addEventListener('click', e => {
+    clearInterval(timer);
+    let v = 0; const bar = $('#progressBar'), txt = $('#progressText'), btn = e.currentTarget;
+    btn.disabled = true;
+    timer = setInterval(() => {
+      v = Math.min(100, v + 4 + Math.random() * 10);
+      bar.style.width = v + '%'; txt.textContent = Math.round(v) + ' %';
+      if (v >= 100) { clearInterval(timer); btn.disabled = false; btn.textContent = 'Erneut starten'; toast('success', 'Übertragung abgeschlossen', 'Die Firmware wurde installiert.'); }
+    }, 350);
+  });
+
+  /* Grundlagen: Farbwerte direkt aus den CSS-Tokens lesen */
+  const root = getComputedStyle(document.documentElement);
+  const resolveVar = name => {
+    let v = root.getPropertyValue(name).trim(), guard = 0;
+    while (v.startsWith('var(') && guard++ < 5) v = root.getPropertyValue(v.slice(4, -1).trim()).trim();
+    return v.toUpperCase();
+  };
+  $$('[data-swatches]').forEach(box => {
+    box.innerHTML = box.dataset.swatches.split(' ').map(n => {
+      const v = resolveVar('--c3-color-' + n);
+      return `<div class="swatch"><div class="swatch__color" style="background:var(--c3-color-${n})"></div><div class="swatch__meta"><div class="swatch__name">${n}</div><div class="swatch__hex">${v}</div></div></div>`;
+    }).join('');
+  });
+  $('#spaces').innerHTML = ['1', '2', '3', '4', '6', '8', '12'].map(k => {
+    const v = root.getPropertyValue('--c3-space-' + k).trim();
+    return `<div class="space-row"><span>space ${k}</span><span class="space-bar" style="width:${v}"></span><span>${v}</span></div>`;
+  }).join('');
+
+  /* Marke: Icongrößen */
+  $('#iconRow').innerHTML = [16, 24, 32, 48, 64, 128].map(s => `<figure><img src="../assets/icon/c3yptax-icon-${s}.png" width="${s}" height="${s}" alt="Icon ${s} px"><figcaption>${s}</figcaption></figure>`).join('');
+
+  /* Bewegung */
+  $('#reduceMotion').addEventListener('change', e => document.documentElement.classList.toggle('c3-reduce-motion', e.target.checked));
+  $$('.track').forEach(t => { t.querySelector('.track__dot').style.transitionTimingFunction = `var(--c3-motion-easing-${t.dataset.ease})`; });
+  $('#playEase').addEventListener('click', () => $$('.track').forEach(t => { t.style.setProperty('--track-w', t.offsetWidth + 'px'); t.classList.toggle('is-on'); }));
+})();
+</script>
+</body>
+</html>

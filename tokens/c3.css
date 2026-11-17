@@ -1,0 +1,139 @@
+/* Generiert aus tokens/tokens.json mit scripts/build-tokens.py. Nicht von Hand bearbeiten. */
+
+:root {
+  color-scheme: dark;
+
+  --c3-color-brand-cyan: #07FCFD;
+  --c3-color-brand-teal: #06D0C4;
+  --c3-color-brand-green: #48F762;
+  --c3-color-brand-ice: #D5FDFE;
+  --c3-color-brand-deep: #01070C;
+  --c3-color-brand-glow: #063B3D;
+  --c3-color-bg-canvas: #0A0D10;
+  --c3-color-bg-subtle: #0E1215;
+  --c3-color-bg-overlay: #030507B8;
+  --c3-color-surface-card: #14181D;
+  --c3-color-surface-input: #1A1F25;
+  --c3-color-surface-popover: #1C2127;
+  --c3-color-surface-control: #20262D;
+  --c3-color-surface-control-hover: #29303A;
+  --c3-color-surface-control-pressed: #1C2128;
+  --c3-color-surface-disabled: #171B20;
+  --c3-color-border-subtle: #232A31;
+  --c3-color-border-default: #2E363F;
+  --c3-color-border-strong: #3D4752;
+  --c3-color-border-control: #4B5661;
+  --c3-color-border-focus: var(--c3-color-accent-hover);
+  --c3-color-text-primary: #E6EBEF;
+  --c3-color-text-secondary: #A8B2BC;
+  --c3-color-text-muted: #8A949E;
+  --c3-color-text-disabled: #5E6670;
+  --c3-color-text-on-accent: #04181A;
+  --c3-color-text-link: var(--c3-color-accent-hover);
+  --c3-color-accent-default: #19D4DC;
+  --c3-color-accent-hover: #4DE2E8;
+  --c3-color-accent-pressed: #12B3BA;
+  --c3-color-accent-text: #5FE6EC;
+  --c3-color-accent-subtle: #0E2A2E;
+  --c3-color-accent-subtle-hover: #12363B;
+  --c3-color-accent-border: #1D6A70;
+  --c3-color-secondary-default: #1FC7B6;
+  --c3-color-secondary-subtle: #0D2A27;
+  --c3-color-status-success: #3FD97A;
+  --c3-color-status-success-subtle: #0F2A1A;
+  --c3-color-status-success-border: #1F5C36;
+  --c3-color-status-warning: #F5A524;
+  --c3-color-status-warning-subtle: #2E220C;
+  --c3-color-status-warning-border: #6B4A12;
+  --c3-color-status-danger: #FF6B70;
+  --c3-color-status-danger-solid: #C8373E;
+  --c3-color-status-danger-solid-hover: #B02E35;
+  --c3-color-status-danger-subtle: #2E1316;
+  --c3-color-status-danger-border: #6E2A2E;
+  --c3-color-status-info: var(--c3-color-accent-default);
+  --c3-color-status-info-subtle: var(--c3-color-accent-subtle);
+  --c3-color-status-info-border: var(--c3-color-accent-border);
+
+  --c3-font-family-ui: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", "Arial", sans-serif;
+  --c3-font-family-mono: "Cascadia Mono", "Consolas", "SF Mono", "JetBrains Mono", "Menlo", monospace;
+  --c3-font-weight-regular: 400;
+  --c3-font-weight-semibold: 600;
+  --c3-font-size-xs: 12px;
+  --c3-font-size-sm: 13px;
+  --c3-font-size-md: 14px;
+  --c3-font-size-lg: 16px;
+  --c3-font-size-xl: 20px;
+  --c3-font-size-2xl: 24px;
+  --c3-font-size-3xl: 28px;
+  --c3-font-line-height-tight: 1.25;
+  --c3-font-line-height-normal: 1.45;
+
+  --c3-typography-display: 600 28px/1.25 "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", "Arial", sans-serif;
+  --c3-typography-title: 600 20px/1.25 "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", "Arial", sans-serif;
+  --c3-typography-heading: 600 16px/1.25 "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", "Arial", sans-serif;
+  --c3-typography-label: 600 13px/1.25 "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", "Arial", sans-serif;
+  --c3-typography-body: 400 14px/1.45 "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", "Arial", sans-serif;
+  --c3-typography-small: 400 13px/1.45 "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", "Arial", sans-serif;
+  --c3-typography-caption: 400 12px/1.45 "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", "Arial", sans-serif;
+  --c3-typography-code: 400 13px/1.45 "Cascadia Mono", "Consolas", "SF Mono", "JetBrains Mono", "Menlo", monospace;
+
+  --c3-space-0: 0px;
+  --c3-space-1: 4px;
+  --c3-space-2: 8px;
+  --c3-space-3: 12px;
+  --c3-space-4: 16px;
+  --c3-space-5: 20px;
+  --c3-space-6: 24px;
+  --c3-space-8: 32px;
+  --c3-space-10: 40px;
+  --c3-space-12: 48px;
+
+  --c3-radius-xs: 4px;
+  --c3-radius-sm: 6px;
+  --c3-radius-md: 8px;
+  --c3-radius-lg: 10px;
+  --c3-radius-xl: 14px;
+  --c3-radius-full: 9999px;
+
+  --c3-size-control-sm: 28px;
+  --c3-size-control-md: 32px;
+  --c3-size-control-lg: 40px;
+  --c3-size-icon-sm: 16px;
+  --c3-size-icon-md: 20px;
+  --c3-size-row-compact: 32px;
+  --c3-size-row-default: 40px;
+  --c3-size-sidebar: 232px;
+  --c3-size-titlebar: 44px;
+  --c3-size-focus-ring: 2px;
+
+  --c3-shadow-sm: 0px 1px 2px 0px #00000066;
+  --c3-shadow-md: 0px 8px 24px 0px #00000073;
+  --c3-shadow-lg: 0px 24px 64px 0px #0000008C;
+
+  --c3-motion-duration-instant: 80ms;
+  --c3-motion-duration-fast: 120ms;
+  --c3-motion-duration-normal: 180ms;
+  --c3-motion-duration-slow: 250ms;
+  --c3-motion-duration-loop: 1400ms;
+  --c3-motion-duration-spin: 900ms;
+  --c3-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --c3-motion-easing-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --c3-motion-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+  --c3-motion-easing-linear: cubic-bezier(0, 0, 1, 1);
+  --c3-motion-distance-lift: 2px;
+  --c3-motion-distance-shift: 4px;
+  --c3-motion-distance-enter: 8px;
+  --c3-motion-scale-press: 0.98;
+  --c3-motion-scale-enter: 0.97;
+}
+
+/* Reduzierte Bewegung: keine Wege und Skalierungen, Farb- und Deckkraftwechsel bleiben. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --c3-motion-distance-lift: 0px;
+    --c3-motion-distance-shift: 0px;
+    --c3-motion-distance-enter: 0px;
+    --c3-motion-scale-press: 1;
+    --c3-motion-scale-enter: 1;
+  }
+}
