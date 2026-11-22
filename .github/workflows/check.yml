@@ -17,8 +17,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Pillow installieren
-        run: pip install pillow
+      - name: Pillow und NumPy installieren
+        run: pip install pillow numpy
 
       - name: Design-System prüfen
         run: python scripts/check.py
@@ -26,8 +26,9 @@ jobs:
       - name: Abgeleitete Assets reproduzierbar
         run: |
           python scripts/build-assets.py
+          python scripts/build-wallpapers.py
           git status --porcelain assets
-          test -z "$(git status --porcelain assets)" || echo "::warning::Neu erzeugte Assets weichen ab. Bitte scripts/build-assets.py lokal ausführen."
+          test -z "$(git status --porcelain assets)" || echo "::warning::Neu erzeugte Assets weichen ab. Bitte scripts/build-assets.py und scripts/build-wallpapers.py lokal ausführen."
 
       - name: PowerShell-Syntax prüfen
         shell: pwsh

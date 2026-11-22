@@ -9,8 +9,9 @@ Prüft:
     4. Sprachregeln in Dokumentation und Beispielen
     5. Keine privaten Daten (E-Mail-Adressen, Telefonnummern)
     6. ICO-Datei enthält alle Größen
+    7. Wallpaper vollständig und in der richtigen Größe
 
-Benötigt Pillow für Punkt 6. Ohne Pillow wird dieser Punkt übersprungen.
+Benötigt Pillow für Punkt 6 und 7. Ohne Pillow werden diese Punkte übersprungen.
 """
 
 import hashlib
@@ -152,8 +153,17 @@ try:
     want = {(s, s) for s in (16, 20, 24, 32, 40, 48, 64, 128, 256)}
     if set(ico.info["sizes"]) != want:
         fail(f"ICO-Größen unvollständig: {sorted(ico.info['sizes'])}")
+
+    # 7. Wallpaper -------------------------------------------------------------
+    for tag in ("", "-wordmark"):
+        for w, h in ((1920, 1080), (2560, 1440), (3840, 2160)):
+            f = ROOT / "assets" / "wallpaper" / f"c3yptax-wallpaper{tag}-{w}x{h}.png"
+            if not f.exists():
+                fail(f"Wallpaper fehlt: {f.name}")
+            elif Image.open(f).size != (w, h):
+                fail(f"Wallpaper hat falsche Größe: {f.name}")
 except ImportError:
-    print("Pillow fehlt, ICO-Prüfung übersprungen.")
+    print("Pillow fehlt, Prüfung von ICO und Wallpapern übersprungen.")
 
 if errors:
     print("Fehler:")

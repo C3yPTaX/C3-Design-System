@@ -1,6 +1,6 @@
 # Branding
 
-Alle Dateien liegen in [`assets/`](../assets/). Die Originale in `assets/originals/` bleiben unverändert. Alle anderen Dateien werden mit `python scripts/build-assets.py` daraus erzeugt.
+Alle Dateien liegen in [`assets/`](../assets/). Die Originale in `assets/originals/` bleiben unverändert. Alle anderen Dateien werden daraus erzeugt: Logos, Icons und Profilbild mit `python scripts/build-assets.py`, die Wallpaper mit `python scripts/build-wallpapers.py`.
 
 ## Übersicht
 
@@ -11,8 +11,8 @@ Alle Dateien liegen in [`assets/`](../assets/). Die Originale in `assets/origina
 | Programmicon | `icon/c3yptax.ico` | EXE, Taskleiste, Fenstertitel, Verknüpfungen |
 | Programmicon als PNG | `icon/c3yptax-icon-{16 bis 256}.png` | Favicon, Web-Manifest, plattformübergreifende Apps |
 | Profilbild | `profile/c3yptax-avatar-{256,512,1024}.jpg` | GitHub, Foren, Social Media |
-| Wallpaper mit Schriftzug | `originals/c3yptax-wallpaper-wordmark-*.webp` | Desktop, Präsentationstitel |
-| Wallpaper ohne Schriftzug | `originals/c3yptax-wallpaper-1920x1080.webp` | Desktop, Hintergrund für Titelfolien mit eigenem Text |
+| Wallpaper mit Schriftzug | `wallpaper/c3yptax-wallpaper-wordmark-{1920x1080,2560x1440,3840x2160}.png` | Desktop, Präsentationstitel |
+| Wallpaper ohne Schriftzug | `wallpaper/c3yptax-wallpaper-{1920x1080,2560x1440,3840x2160}.png` | Desktop, Hintergrund für Titelfolien mit eigenem Text |
 
 ## Originale
 
@@ -20,13 +20,24 @@ Alle Dateien liegen in [`assets/`](../assets/). Die Originale in `assets/origina
 | --- | --- | --- |
 | `c3yptax-logo.webp` | 1254 x 1254 | Chip mit C3, Symbolen und Schriftzug |
 | `c3yptax-mark.jpg` | 1254 x 1254 | Chip mit C3 im Kreis, ohne Schrift |
-| `c3yptax-wallpaper-wordmark-2000x1125.webp` | 2000 x 1125 | Wallpaper mit Schriftzug |
-| `c3yptax-wallpaper-wordmark-1920x1080.webp` | 1920 x 1080 | Wallpaper mit Schriftzug |
-| `c3yptax-wallpaper-1920x1080.webp` | 1920 x 1080 | Wallpaper ohne Schriftzug |
+| `c3yptax-wallpaper-wordmark-2000x1125.webp` | 2000 x 1125 | Altes Wallpaper mit Schriftzug, abgelöst durch `wallpaper/` |
+| `c3yptax-wallpaper-wordmark-1920x1080.webp` | 1920 x 1080 | Altes Wallpaper mit Schriftzug, abgelöst durch `wallpaper/` |
+| `c3yptax-wallpaper-1920x1080.webp` | 1920 x 1080 | Altes Wallpaper ohne Schriftzug, abgelöst durch `wallpaper/` |
 
 Die Prüfsummen stehen in `assets/originals/SHA256SUMS`. `scripts/check.py` meldet jede Veränderung.
 
-Größere Varianten als die Originale werden nicht erzeugt, weil Hochskalieren unscharf wird. Für 4K-Wallpaper braucht es neue Originale.
+Logos, Icons und Profilbild werden nicht größer als die Originale erzeugt, weil Hochskalieren unscharf wird.
+
+## Wallpaper
+
+Die Wallpaper gibt es in Full HD, WQHD und 4K, jeweils mit und ohne Schriftzug. Sie werden aus `c3yptax-mark.jpg` und dem Schriftzug aus `c3yptax-logo.webp` zusammengesetzt.
+
+- Das Logo bleibt unverändert und steht kleiner in der Mitte.
+- Der Grund ist ruhig: `color.brand.deep` mit einem weichen Lichthof in `color.brand.glow`.
+- Keine Schaltkreislinien, keine Lichtkeile, keine HUD-Leiste.
+- Die Ränder bleiben frei, damit Desktopsymbole und Taskleiste nichts verdecken.
+
+Auch die 4K-Fassung ist echt. Der Grund wird in jeder Auflösung neu berechnet, und das Logo wird nirgends hochskaliert: In 4K ist es 900 px breit, das Original hat 1254 px.
 
 ## Programmicon
 
