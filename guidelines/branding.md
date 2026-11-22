@@ -20,9 +20,6 @@ Alle Dateien liegen in [`assets/`](../assets/). Die Originale in `assets/origina
 | --- | --- | --- |
 | `c3yptax-logo.webp` | 1254 x 1254 | Chip mit C3, Symbolen und Schriftzug |
 | `c3yptax-mark.jpg` | 1254 x 1254 | Chip mit C3 im Kreis, ohne Schrift |
-| `c3yptax-wallpaper-wordmark-2000x1125.webp` | 2000 x 1125 | Altes Wallpaper mit Schriftzug, abgelöst durch `wallpaper/` |
-| `c3yptax-wallpaper-wordmark-1920x1080.webp` | 1920 x 1080 | Altes Wallpaper mit Schriftzug, abgelöst durch `wallpaper/` |
-| `c3yptax-wallpaper-1920x1080.webp` | 1920 x 1080 | Altes Wallpaper ohne Schriftzug, abgelöst durch `wallpaper/` |
 
 Die Prüfsummen stehen in `assets/originals/SHA256SUMS`. `scripts/check.py` meldet jede Veränderung.
 
