@@ -58,8 +58,9 @@ Verwendung:
 
 Jedes Produkt bekommt ein eigenes Programmicon, damit sich die Anwendungen auf dem Desktop und in der Taskleiste unterscheiden. Der Chip-Rahmen bleibt bei allen gleich, in der Mitte steht statt C3 ein Produktzeichen. Das Icon mit C3 bleibt das Zeichen der Marke. Solange ein Produkt kein eigenes Zeichen hat, nutzt es `icon/c3yptax.ico`.
 
-- **16 bis 32 px:** nur das Produktzeichen auf der Kachel.
+- **16 bis 32 px:** das Produktzeichen auf einer kleinen dunklen Platte in Form des Chips.
 - **ab 40 px:** Produktzeichen im Chip-Rahmen.
+- **Hintergrund:** transparent. Dunkel ist nur das Innere des Chips, es gibt keine quadratische Kachel. So sitzt das Icon auf hellem und dunklem Desktop ohne dunklen Rand.
 
 Die Vorlage liegt in `product-icon/c3-product-frame.svg`. `python scripts/build-product-icon.py <zeichen.svg> <zielordner>` setzt ein Zeichen ein und erzeugt ICO und PNG in allen Größen (benötigt Pillow und resvg-py). Zwei Beispiele mit Übersicht stehen in [`examples/product-icons/`](../examples/product-icons/).
 

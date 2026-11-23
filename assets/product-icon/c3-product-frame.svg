@@ -106,9 +106,10 @@
   </defs>
 
   <!-- VORLAGE: Rahmen Anfang -->
+  <!-- Nur das Innere des Chips ist dunkel, außen herum bleibt das Icon transparent. -->
   <g id="grund">
-    <rect width="1254" height="1254" fill="#01070C"/>
-    <rect width="1254" height="1254" fill="url(#grund-lichthof)"/>
+    <use xlink:href="#form-rahmen" href="#form-rahmen" fill="#01070C"/>
+    <use xlink:href="#form-rahmen" href="#form-rahmen" fill="url(#grund-lichthof)"/>
   </g>
 
   <g id="chip-rahmen">
