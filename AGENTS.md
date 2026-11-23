@@ -26,7 +26,7 @@ Im Zweifel zeigt [examples/preview.html](examples/preview.html), wie das Ergebni
 - Sichtbarer Tastaturfokus mit 2 px Ring in `border.focus`.
 - Status immer mit Text oder Symbol, nie nur mit Farbe.
 - Animationen nur mit den Motion-Tokens, 80 bis 250 ms, kleine Wege. Reduzierte Bewegung respektieren.
-- Programmicon aus `assets/icon/c3yptax.ico` für EXE, Fenster und Taskleiste.
+- Programmicon für EXE, Fenster und Taskleiste: das eigene Produkt-Icon nach [guidelines/branding.md](guidelines/branding.md), erzeugt mit `scripts/build-product-icon.py`. Hat das Produkt noch keins, `assets/icon/c3yptax.ico`.
 - Systemschriften: Segoe UI unter Windows, Font-Stack aus `font.family.ui` im Web.
 
 ### Verboten

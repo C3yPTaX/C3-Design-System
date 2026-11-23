@@ -10,6 +10,7 @@ Alle Dateien liegen in [`assets/`](../assets/). Die Originale in `assets/origina
 | Kompaktlogo ohne Schrift | `mark/c3yptax-mark-{128,256,512}.png` | Wenn der Name schon sichtbar ist oder wenig Platz ist |
 | Programmicon | `icon/c3yptax.ico` | EXE, Taskleiste, Fenstertitel, Verknüpfungen |
 | Programmicon als PNG | `icon/c3yptax-icon-{16 bis 256}.png` | Favicon, Web-Manifest, plattformübergreifende Apps |
+| Vorlage für Produkt-Icons | `product-icon/c3-product-frame.svg` | Eigenes Programmicon je Produkt, siehe unten |
 | Profilbild | `profile/c3yptax-avatar-{256,512,1024}.jpg` | GitHub, Foren, Social Media |
 | Wallpaper mit Schriftzug | `wallpaper/c3yptax-wallpaper-wordmark-{1920x1080,2560x1440,3840x2160}.png` | Desktop, Präsentationstitel |
 | Wallpaper ohne Schriftzug | `wallpaper/c3yptax-wallpaper-{1920x1080,2560x1440,3840x2160}.png` | Desktop, Hintergrund für Titelfolien mit eigenem Text |
@@ -54,9 +55,7 @@ Verwendung:
 
 ## Produkt-Icons
 
-Entwurf, noch nicht verbindlich. Bis zur Entscheidung nutzen alle Produkte `icon/c3yptax.ico`.
-
-Jedes Produkt bekommt ein eigenes Programmicon, damit sich die Anwendungen auf dem Desktop und in der Taskleiste unterscheiden. Der Chip-Rahmen bleibt bei allen gleich, in der Mitte steht statt C3 ein Produktzeichen. Das Icon mit C3 bleibt das Zeichen der Marke.
+Jedes Produkt bekommt ein eigenes Programmicon, damit sich die Anwendungen auf dem Desktop und in der Taskleiste unterscheiden. Der Chip-Rahmen bleibt bei allen gleich, in der Mitte steht statt C3 ein Produktzeichen. Das Icon mit C3 bleibt das Zeichen der Marke. Solange ein Produkt kein eigenes Zeichen hat, nutzt es `icon/c3yptax.ico`.
 
 - **16 bis 32 px:** nur das Produktzeichen auf der Kachel.
 - **ab 40 px:** Produktzeichen im Chip-Rahmen.

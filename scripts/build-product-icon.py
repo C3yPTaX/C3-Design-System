@@ -1,4 +1,4 @@
-"""Erzeugt das Programmicon eines Produkts aus Rahmenvorlage und Produktzeichen. Entwurf.
+"""Erzeugt das Programmicon eines Produkts aus Rahmenvorlage und Produktzeichen.
 
     python scripts/build-product-icon.py <zeichen.svg> <zielordner> [--name NAME]
 

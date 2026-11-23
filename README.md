@@ -22,7 +22,7 @@ assets/
   icon/          Programmicon als ICO und PNG
   profile/       Profilbild
   wallpaper/     Wallpaper in Full HD, WQHD und 4K, mit und ohne Schriftzug
-  product-icon/  Vorlage für Produkt-Icons (Entwurf)
+  product-icon/  Vorlage für Produkt-Icons
 tokens/
   tokens.json    Einzige Quelle aller Designwerte (W3C Design Tokens)
   c3.css         Generiert: CSS-Variablen
@@ -81,6 +81,8 @@ Claude und andere Werkzeuge finden in [AGENTS.md](AGENTS.md) die verbindlichen R
 Neue Grafiken kommen nach `assets/originals/`, danach `python scripts/build-assets.py` (benötigt Pillow) und die Prüfsumme in `SHA256SUMS` ergänzen.
 
 Die Wallpaper erzeugt `python scripts/build-wallpapers.py` (benötigt Pillow und NumPy). Der Lauf dauert ein bis zwei Minuten.
+
+Das Programmicon eines Produkts erzeugt `python scripts/build-product-icon.py <zeichen.svg> <zielordner>` (benötigt Pillow und resvg-py). Regeln für das Zeichen in [guidelines/branding.md](guidelines/branding.md).
 
 Die Prüfung läuft auch automatisch bei jedem Push über GitHub Actions.
 
