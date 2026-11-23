@@ -52,6 +52,26 @@ Verwendung:
 - In WinForms: `$form.Icon = New-Object System.Drawing.Icon($pfad)`. Beispiel in [`examples/winforms-demo.ps1`](../examples/winforms-demo.ps1).
 - Im Web: `icon/c3yptax-icon-32.png` und `-64.png` als Favicon.
 
+## Produkt-Icons
+
+Entwurf, noch nicht verbindlich. Bis zur Entscheidung nutzen alle Produkte `icon/c3yptax.ico`.
+
+Jedes Produkt bekommt ein eigenes Programmicon, damit sich die Anwendungen auf dem Desktop und in der Taskleiste unterscheiden. Der Chip-Rahmen bleibt bei allen gleich, in der Mitte steht statt C3 ein Produktzeichen. Das Icon mit C3 bleibt das Zeichen der Marke.
+
+- **16 bis 32 px:** nur das Produktzeichen auf der Kachel.
+- **ab 40 px:** Produktzeichen im Chip-Rahmen.
+
+Die Vorlage liegt in `product-icon/c3-product-frame.svg`. `python scripts/build-product-icon.py <zeichen.svg> <zielordner>` setzt ein Zeichen ein und erzeugt ICO und PNG in allen Größen (benötigt Pillow und resvg-py). Zwei Beispiele mit Übersicht stehen in [`examples/product-icons/`](../examples/product-icons/).
+
+Regeln für das Zeichen:
+
+- SVG mit einem Raster von 100 x 100. Das Zeichen bleibt zwischen 6 und 94.
+- Eine geschlossene Fläche in einer Farbe, Löcher über `evenodd`. Farbe, Lichtkante und Schein kommen aus der Vorlage.
+- Stege und Lücken mindestens 8 Einheiten breit. Feinere Details verschwinden bei 16 px.
+- Gerade Kanten und Abschrägungen im Winkel von 45 Grad, passend zu den Buchstaben des Logos.
+- Ein Motiv, das die Aufgabe des Produkts zeigt. Keine Buchstaben, kein C3, keine Motive des Logos wie Fadenkreuz oder Leiterbahnen.
+- Das fertige Icon und sein Zeichen liegen im Produkt, nicht im Design-System.
+
 ## Regeln
 
 - Logos immer auf dunklem Grund. Die Grafiken haben einen eingebauten schwarzen Hintergrund und sind nicht für helle Flächen gedacht.

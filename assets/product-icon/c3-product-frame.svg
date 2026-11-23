@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Vorlage für Produkt-Icons von C3yPTaX. Entwurf.
+
+  Der Chip-Rahmen stammt aus assets/vector/c3yptax-mark.svg, ohne Buchstaben,
+  Fadenkreuz, Kreise und Leiterbahnen. In der Mitte sitzt das Produktzeichen.
+  scripts/build-product-icon.py setzt das Zeichen ein und erzeugt daraus die Icons.
+
+  Farben aus color.brand in tokens/tokens.json:
+    cyan #07FCFD   teal #06D0C4   green #48F762
+    ice  #D5FDFE   deep #01070C   glow  #063B3D
+-->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="211.5 188.5 830 830" width="830" height="830" role="img" aria-labelledby="titel">
+  <title id="titel">C3yPTaX Produkt-Icon</title>
+
+  <defs>
+    <!-- Rahmen, übernommen aus dem Kompaktlogo ............................... -->
+    <!-- Mittellinie des Chip-Rahmens, Strichstärke 14 -->
+    <path id="form-rahmen" d="M342.5,267.5 H910 L1011,368.5 V832.5 L904.5,939 H348.5 L242,832.5 V368 Z"/>
+    <!-- Außenkante des Rahmens für die Lichtkante -->
+    <path id="form-rahmen-kante" d="M340.8,263.5 H911.7 L1015,366.8 V833.9 L905.9,943 H346.8 L238,834.2 V366.3 Z"/>
+    <!-- äußere zwei Drittel des Bandes, für den Helligkeitsabfall nach innen -->
+    <path id="form-rahmen-aussen" d="M341.5,265 H911 L1013.5,367.5 V833.3 L905.3,941.5 H347.5 L239.5,833.5 V367 Z"/>
+    <path id="form-innenlinie" d="M356,296 H897 L986,385 V828 L899,915 H357 L268,826 V384 Z"/>
+    <clipPath id="clip-stifte-oben"><rect x="480" y="190" width="300" height="71.5"/></clipPath>
+    <clipPath id="clip-stifte-unten"><rect x="480" y="945.5" width="300" height="75"/></clipPath>
+
+    <!-- Verläufe: Grund ...................................................... -->
+    <radialGradient id="grund-lichthof" gradientUnits="userSpaceOnUse" cx="627" cy="607" r="600">
+      <stop offset="0" stop-color="#063B3D" stop-opacity="0.32"/>
+      <stop offset="0.45" stop-color="#063B3D" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#063B3D" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Verläufe: Chip-Rahmen ................................................ -->
+    <linearGradient id="rahmen-band" gradientUnits="userSpaceOnUse" x1="0" y1="261" x2="0" y2="946">
+      <stop offset="0" stop-color="#07FCFD"/>
+      <stop offset="0.17" stop-color="#07FCFD"/>
+      <stop offset="0.28" stop-color="#06D0C4" stop-opacity="0.85"/>
+      <stop offset="0.38" stop-color="#06D0C4" stop-opacity="0.5"/>
+      <stop offset="0.5" stop-color="#06D0C4" stop-opacity="0.58"/>
+      <stop offset="0.64" stop-color="#06D0C4" stop-opacity="0.52"/>
+      <stop offset="0.79" stop-color="#07FCFD" stop-opacity="0.92"/>
+      <stop offset="0.83" stop-color="#07FCFD"/>
+      <stop offset="1" stop-color="#07FCFD"/>
+    </linearGradient>
+    <linearGradient id="rahmen-gruen" gradientUnits="userSpaceOnUse" x1="0" y1="261" x2="0" y2="946">
+      <stop offset="0.24" stop-color="#48F762" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#48F762" stop-opacity="0.4"/>
+      <stop offset="0.76" stop-color="#48F762" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rahmen-kante" gradientUnits="userSpaceOnUse" x1="0" y1="261" x2="0" y2="946">
+      <stop offset="0" stop-color="#D5FDFE"/>
+      <stop offset="0.15" stop-color="#D5FDFE"/>
+      <stop offset="0.24" stop-color="#07FCFD"/>
+      <stop offset="0.5" stop-color="#07FCFD" stop-opacity="0.9"/>
+      <stop offset="0.76" stop-color="#07FCFD"/>
+      <stop offset="0.85" stop-color="#D5FDFE"/>
+      <stop offset="1" stop-color="#D5FDFE"/>
+    </linearGradient>
+    <!-- helle Stelle in der Mitte der oberen und unteren Rahmenlinie -->
+    <linearGradient id="rahmen-glanz" gradientUnits="userSpaceOnUse" x1="342" y1="0" x2="910" y2="0">
+      <stop offset="0.3" stop-color="#D5FDFE" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#D5FDFE" stop-opacity="1"/>
+      <stop offset="0.7" stop-color="#D5FDFE" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="innenlinie-maske-verlauf" gradientUnits="userSpaceOnUse" cx="627" cy="604" r="470">
+      <stop offset="0.66" stop-color="#000"/>
+      <stop offset="0.82" stop-color="#FFF"/>
+    </radialGradient>
+    <mask id="innenlinie-maske" maskUnits="userSpaceOnUse" x="0" y="0" width="1254" height="1254">
+      <rect width="1254" height="1254" fill="url(#innenlinie-maske-verlauf)"/>
+    </mask>
+    <linearGradient id="platte" gradientUnits="userSpaceOnUse" x1="472" y1="0" x2="782" y2="0">
+      <stop offset="0" stop-color="#06D0C4" stop-opacity="0.3"/>
+      <stop offset="0.16" stop-color="#06D0C4" stop-opacity="0.4"/>
+      <stop offset="0.5" stop-color="#06D0C4" stop-opacity="1"/>
+      <stop offset="0.84" stop-color="#06D0C4" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#06D0C4" stop-opacity="0.3"/>
+    </linearGradient>
+    <linearGradient id="stift-oben" gradientUnits="userSpaceOnUse" x1="0" y1="199" x2="0" y2="262">
+      <stop offset="0" stop-color="#D5FDFE"/>
+      <stop offset="0.33" stop-color="#07FCFD"/>
+      <stop offset="0.6" stop-color="#07FCFD"/>
+      <stop offset="0.85" stop-color="#06D0C4"/>
+      <stop offset="1" stop-color="#06D0C4" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="stift-unten" gradientUnits="userSpaceOnUse" x1="0" y1="945" x2="0" y2="1008">
+      <stop offset="0" stop-color="#06D0C4" stop-opacity="0.45"/>
+      <stop offset="0.3" stop-color="#06D0C4"/>
+      <stop offset="0.55" stop-color="#07FCFD"/>
+      <stop offset="0.8" stop-color="#07FCFD"/>
+      <stop offset="1" stop-color="#D5FDFE"/>
+    </linearGradient>
+
+    <filter id="schein-weit" filterUnits="userSpaceOnUse" x="0" y="0" width="1254" height="1254">
+      <feGaussianBlur stdDeviation="16"/>
+    </filter>
+    <filter id="schein-eng" filterUnits="userSpaceOnUse" x="0" y="0" width="1254" height="1254">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+    <filter id="weich" filterUnits="userSpaceOnUse" x="0" y="0" width="1254" height="1254">
+      <feGaussianBlur stdDeviation="0.7"/>
+    </filter>
+  </defs>
+
+  <!-- VORLAGE: Rahmen Anfang -->
+  <g id="grund">
+    <rect width="1254" height="1254" fill="#01070C"/>
+    <rect width="1254" height="1254" fill="url(#grund-lichthof)"/>
+  </g>
+
+  <g id="chip-rahmen">
+    <g id="rahmen-schein" fill="none" stroke="#07FCFD">
+      <use xlink:href="#form-rahmen" href="#form-rahmen" stroke-width="16" filter="url(#schein-weit)" opacity="0.3"/>
+      <use xlink:href="#form-rahmen" href="#form-rahmen" stroke-width="14" filter="url(#schein-eng)" opacity="0.5"/>
+    </g>
+
+    <use id="innenlinie" xlink:href="#form-innenlinie" href="#form-innenlinie" fill="none"
+         stroke="#063B3D" stroke-width="5" mask="url(#innenlinie-maske)"/>
+
+    <g id="kontaktstifte">
+      <g id="stifte-schein" fill="#07FCFD" filter="url(#schein-eng)" opacity="0.5">
+        <path d="M492,205 h26 v56 h-26 Z M553.5,205 h26 v56 h-26 Z M615,205 h26 v56 h-26 Z M676,205 h26 v56 h-26 Z M737.5,205 h26 v56 h-26 Z"/>
+        <path d="M492,946 h26 v56 h-26 Z M553.5,946 h26 v56 h-26 Z M615,946 h26 v56 h-26 Z M676,946 h26 v56 h-26 Z M737.5,946 h26 v56 h-26 Z"/>
+      </g>
+      <g id="stifte-oben" fill="url(#stift-oben)" clip-path="url(#clip-stifte-oben)">
+        <rect x="492" y="199" width="26" height="70" rx="7"/>
+        <rect x="553.5" y="199" width="26" height="70" rx="7"/>
+        <rect x="615" y="199" width="26" height="70" rx="7"/>
+        <rect x="676" y="199" width="26" height="70" rx="7"/>
+        <rect x="737.5" y="199" width="26" height="70" rx="7"/>
+      </g>
+      <g id="stifte-unten" fill="url(#stift-unten)" clip-path="url(#clip-stifte-unten)">
+        <rect x="492" y="938" width="26" height="70" rx="7"/>
+        <rect x="553.5" y="938" width="26" height="70" rx="7"/>
+        <rect x="615" y="938" width="26" height="70" rx="7"/>
+        <rect x="676" y="938" width="26" height="70" rx="7"/>
+        <rect x="737.5" y="938" width="26" height="70" rx="7"/>
+      </g>
+    </g>
+
+    <g id="platten" fill="url(#platte)">
+      <path d="M472,274 H781 L754,302 H500 Z"/>
+      <path d="M497,910 H760 L782,933 H472 Z"/>
+    </g>
+
+    <use id="rahmen-band" xlink:href="#form-rahmen" href="#form-rahmen" fill="none"
+         stroke="url(#rahmen-band)" stroke-width="14"/>
+    <use id="rahmen-gruen" xlink:href="#form-rahmen" href="#form-rahmen" fill="none"
+         stroke="url(#rahmen-gruen)" stroke-width="14"/>
+    <use id="rahmen-aussen" xlink:href="#form-rahmen-aussen" href="#form-rahmen-aussen" fill="none"
+         stroke="#07FCFD" stroke-opacity="0.35" stroke-width="9" filter="url(#weich)"/>
+    <use id="rahmen-lichtkante" xlink:href="#form-rahmen-kante" href="#form-rahmen-kante" fill="none"
+         stroke="url(#rahmen-kante)" stroke-width="6" filter="url(#weich)"/>
+    <g id="rahmen-glanz" stroke="url(#rahmen-glanz)" stroke-width="14">
+      <path d="M342.5,267.5 H910"/>
+      <path d="M348.5,939 H904.5"/>
+    </g>
+  </g>
+  <!-- VORLAGE: Rahmen Ende -->
+
+  <!--
+    Produktzeichen. Das Zeichen wird in einem Raster von 100 x 100 gezeichnet
+    und hier auf 500 px in die Mitte des Rahmens gesetzt.
+  -->
+  <svg id="produktzeichen" x="376.5" y="356" width="500" height="500" viewBox="0 0 100 100" overflow="visible">
+    <defs>
+      <!-- VORLAGE: Zeichen. Das Skript ersetzt den Pfad. -->
+      <path id="zeichen" fill-rule="evenodd" clip-rule="evenodd" d="M50,8 L92,50 L50,92 L8,50 Z"/>
+
+      <clipPath id="clip-zeichen"><use xlink:href="#zeichen" href="#zeichen" clip-rule="evenodd"/></clipPath>
+      <!-- Kanten, die nach oben zeigen: Form minus dieselbe Form etwas tiefer -->
+      <mask id="maske-zeichen-oben" maskUnits="userSpaceOnUse" x="-10" y="-10" width="120" height="120">
+        <use xlink:href="#zeichen" href="#zeichen" fill="#FFF"/>
+        <use xlink:href="#zeichen" href="#zeichen" fill="#000" transform="translate(0,1.9)"/>
+      </mask>
+      <!-- Glanz von oben links, wie bei den Buchstaben des Logos -->
+      <linearGradient id="zeichen-licht" gradientUnits="userSpaceOnUse" x1="5" y1="5" x2="95" y2="95">
+        <stop offset="0" stop-color="#D5FDFE" stop-opacity="0.85"/>
+        <stop offset="0.5" stop-color="#D5FDFE" stop-opacity="0.4"/>
+        <stop offset="1" stop-color="#D5FDFE" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="zeichen-schein-weit" filterUnits="userSpaceOnUse" x="-30" y="-30" width="160" height="160">
+        <feGaussianBlur stdDeviation="3.7"/>
+      </filter>
+      <filter id="zeichen-schein-eng" filterUnits="userSpaceOnUse" x="-30" y="-30" width="160" height="160">
+        <feGaussianBlur stdDeviation="1.2"/>
+      </filter>
+      <!-- Hebt color.brand.ice an den oberen Lichtkanten bis zu Weiß an. -->
+      <filter id="zeichen-ueberstrahlt" filterUnits="userSpaceOnUse" x="-30" y="-30" width="160" height="160"
+              color-interpolation-filters="sRGB">
+        <feComponentTransfer>
+          <feFuncR type="linear" slope="1.2"/>
+          <feFuncG type="linear" slope="1.2"/>
+          <feFuncB type="linear" slope="1.2"/>
+        </feComponentTransfer>
+      </filter>
+    </defs>
+
+    <g id="zeichen-schein" fill="#07FCFD">
+      <use xlink:href="#zeichen" href="#zeichen" filter="url(#zeichen-schein-weit)" opacity="0.28"/>
+      <use xlink:href="#zeichen" href="#zeichen" filter="url(#zeichen-schein-eng)" opacity="0.5"/>
+    </g>
+    <g id="zeichen-flaeche" clip-path="url(#clip-zeichen)">
+      <use xlink:href="#zeichen" href="#zeichen" fill="#07FCFD"/>
+      <use xlink:href="#zeichen" href="#zeichen" fill="url(#zeichen-licht)"/>
+      <use xlink:href="#zeichen" href="#zeichen" fill="none" stroke="#D5FDFE" stroke-width="2.8" stroke-opacity="0.85"/>
+      <rect x="-10" y="-10" width="120" height="120" fill="#D5FDFE"
+            mask="url(#maske-zeichen-oben)" filter="url(#zeichen-ueberstrahlt)"/>
+    </g>
+  </svg>
+</svg>

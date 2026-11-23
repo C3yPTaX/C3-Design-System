@@ -22,6 +22,7 @@ assets/
   icon/          Programmicon als ICO und PNG
   profile/       Profilbild
   wallpaper/     Wallpaper in Full HD, WQHD und 4K, mit und ohne Schriftzug
+  product-icon/  Vorlage für Produkt-Icons (Entwurf)
 tokens/
   tokens.json    Einzige Quelle aller Designwerte (W3C Design Tokens)
   c3.css         Generiert: CSS-Variablen
