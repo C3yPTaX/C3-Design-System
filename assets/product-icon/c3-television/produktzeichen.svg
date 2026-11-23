@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Produktzeichen C3-Television: Fernseher. Raster 100 x 100, eine Farbe, Löcher über fill-rule evenodd. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <path fill-rule="evenodd" d="M12,18 L88,18 L94,24 L94,70 L88,76 L12,76 L6,70 L6,24 Z M19,28 L81,28 L84,31 L84,63 L81,66 L19,66 L16,63 L16,31 Z M26,6 L38,6 L50,18 L62,6 L74,6 L62,18 L38,18 Z M44,76 L56,76 L56,84 L72,84 L72,92 L28,92 L28,84 L44,84 Z"/>
+</svg>

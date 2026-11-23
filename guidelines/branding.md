@@ -12,6 +12,7 @@ Alle Dateien liegen in [`assets/`](../assets/). Die Originale in `assets/origina
 | Marken-Icon als PNG | `icon/c3yptax-icon-{16 bis 256}.png` | Favicon, Web-Manifest, plattformübergreifende Apps |
 | Vorlage für Produkt-Icons | `product-icon/c3-product-frame.svg` | Eigenes Programmicon je Produkt, siehe unten |
 | Icon des Design-Systems | `product-icon/c3-designsystem/` | Produkt-Icon von C3-DesignSystem mit seinem Zeichen |
+| Icons ohne eigenes Repository | `product-icon/c3-cleanup/`, `product-icon/c3-television/` | Quelle für Produkte, die ihr Icon noch nicht selbst führen |
 | Profilbild | `profile/c3yptax-avatar-{256,512,1024}.jpg` | GitHub, Foren, Social Media |
 | Wallpaper mit Schriftzug | `wallpaper/c3yptax-wallpaper-wordmark-{1920x1080,2560x1440,3840x2160}.png` | Desktop, Präsentationstitel |
 | Wallpaper ohne Schriftzug | `wallpaper/c3yptax-wallpaper-{1920x1080,2560x1440,3840x2160}.png` | Desktop, Hintergrund für Titelfolien mit eigenem Text |
@@ -71,7 +72,7 @@ Regeln für das Zeichen:
 - Stege und Lücken mindestens 8 Einheiten breit. Feinere Details verschwinden bei 16 px.
 - Gerade Kanten und Abschrägungen im Winkel von 45 Grad, passend zu den Buchstaben des Logos.
 - Ein Motiv, das die Aufgabe des Produkts zeigt. Keine Buchstaben, kein C3, keine Motive des Logos wie Fadenkreuz oder Leiterbahnen.
-- Das fertige Icon und sein Zeichen liegen im Produkt, nicht im Design-System.
+- Das fertige Icon und sein Zeichen liegen im Produkt. Solange ein Produkt kein erreichbares Repository hat, liegen sie unter `product-icon/<produkt>/` und werden von dort übernommen.
 
 ## Regeln
 
