@@ -11,6 +11,7 @@ Alle Dateien liegen in [`assets/`](../assets/). Die Originale in `assets/origina
 | Programmicon | `icon/c3yptax.ico` | EXE, Taskleiste, Fenstertitel, Verknüpfungen |
 | Programmicon als PNG | `icon/c3yptax-icon-{16 bis 256}.png` | Favicon, Web-Manifest, plattformübergreifende Apps |
 | Vorlage für Produkt-Icons | `product-icon/c3-product-frame.svg` | Eigenes Programmicon je Produkt, siehe unten |
+| Icon des Design-Systems | `product-icon/c3-designsystem/` | Produkt-Icon von C3-DesignSystem mit seinem Zeichen |
 | Profilbild | `profile/c3yptax-avatar-{256,512,1024}.jpg` | GitHub, Foren, Social Media |
 | Wallpaper mit Schriftzug | `wallpaper/c3yptax-wallpaper-wordmark-{1920x1080,2560x1440,3840x2160}.png` | Desktop, Präsentationstitel |
 | Wallpaper ohne Schriftzug | `wallpaper/c3yptax-wallpaper-{1920x1080,2560x1440,3840x2160}.png` | Desktop, Hintergrund für Titelfolien mit eigenem Text |

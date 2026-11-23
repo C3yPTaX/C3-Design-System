@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Produktzeichen C3-DesignSystem: Bausteine. Raster 100 x 100, eine Farbe, Löcher über fill-rule evenodd. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <path fill-rule="evenodd" d="M14,8 L38,8 L44,14 L44,38 L38,44 L14,44 L8,38 L8,14 Z M14,56 L38,56 L44,62 L44,86 L38,92 L14,92 L8,86 L8,62 Z M62,56 L86,56 L92,62 L92,86 L86,92 L62,92 L56,86 L56,62 Z M74,6 L94,26 L74,46 L54,26 Z"/>
+</svg>

@@ -28,6 +28,7 @@ jobs:
           python scripts/build-assets.py
           python scripts/build-wallpapers.py
           for n in upload film; do python scripts/build-product-icon.py examples/product-icons/symbols/$n.svg examples/product-icons/$n; done
+          python scripts/build-product-icon.py assets/product-icon/c3-designsystem/produktzeichen.svg assets/product-icon/c3-designsystem --name c3-designsystem
           git status --porcelain assets examples/product-icons
           test -z "$(git status --porcelain assets examples/product-icons)" || echo "::warning::Neu erzeugte Assets weichen ab. Bitte die Build-Skripte in scripts/ lokal ausführen."
 
