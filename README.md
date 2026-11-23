@@ -50,7 +50,7 @@ AGENTS.md        Anweisungen für Claude und andere KI-Werkzeuge
 
 ### In PowerShell und WinForms
 
-`tokens/c3-theme.ps1` und `assets/icon/c3yptax.ico` ins Projekt kopieren.
+`tokens/c3-theme.ps1` und das Produkt-Icon ins Projekt kopieren. Ohne eigenes Produkt-Icon `assets/icon/c3yptax.ico`.
 
 ```powershell
 . "$PSScriptRoot\c3-theme.ps1"

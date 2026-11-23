@@ -8,8 +8,8 @@ Alle Dateien liegen in [`assets/`](../assets/). Die Originale in `assets/origina
 | --- | --- | --- |
 | Hauptlogo mit Schriftzug | `logo/c3yptax-logo-{256,512,1024}.png` | Startbildschirm, Über-Dialog, README, Dokumentation |
 | Kompaktlogo ohne Schrift | `mark/c3yptax-mark-{128,256,512}.png` | Wenn der Name schon sichtbar ist oder wenig Platz ist |
-| Programmicon | `icon/c3yptax.ico` | EXE, Taskleiste, Fenstertitel, Verknüpfungen |
-| Programmicon als PNG | `icon/c3yptax-icon-{16 bis 256}.png` | Favicon, Web-Manifest, plattformübergreifende Apps |
+| Marken-Icon | `icon/c3yptax.ico` | Zeichen der Marke, Programmicon für Produkte ohne eigenes Produkt-Icon |
+| Marken-Icon als PNG | `icon/c3yptax-icon-{16 bis 256}.png` | Favicon, Web-Manifest, plattformübergreifende Apps |
 | Vorlage für Produkt-Icons | `product-icon/c3-product-frame.svg` | Eigenes Programmicon je Produkt, siehe unten |
 | Icon des Design-Systems | `product-icon/c3-designsystem/` | Produkt-Icon von C3-DesignSystem mit seinem Zeichen |
 | Profilbild | `profile/c3yptax-avatar-{256,512,1024}.jpg` | GitHub, Foren, Social Media |
@@ -38,9 +38,9 @@ Die Wallpaper gibt es in Full HD, WQHD und 4K, jeweils mit und ohne Schriftzug. 
 
 Auch die 4K-Fassung ist echt. Der Grund wird in jeder Auflösung neu berechnet, und das Logo wird nirgends hochskaliert: In 4K ist es 900 px breit, das Original hat 1254 px.
 
-## Programmicon
+## Marken-Icon
 
-Das Icon ist ein abgerundetes Quadrat in der Hintergrundfarbe der Grafiken (`color.brand.deep`) mit transparenten Ecken.
+Das Marken-Icon ist ein abgerundetes Quadrat in der Hintergrundfarbe der Grafiken (`color.brand.deep`) mit transparenten Ecken.
 
 - **16 bis 32 px:** nur die Buchstaben C3. Rahmen und Kreis wären in dieser Größe nur Rauschen.
 - **ab 40 px:** C3 im Chip-Rahmen.
@@ -49,7 +49,7 @@ Beide Varianten stecken gemeinsam in `c3yptax.ico` (16, 20, 24, 32, 40, 48, 64, 
 
 Verwendung:
 
-- EXE-Dateien, Taskleiste, Fenstersymbol, Startmenü: ja.
+- EXE-Dateien, Taskleiste, Fenstersymbol, Startmenü: nur für Produkte ohne eigenes Produkt-Icon (siehe unten).
 - Ordner wie `App`: **kein** eigenes Ordnersymbol, keine `desktop.ini`.
 - In WinForms: `$form.Icon = New-Object System.Drawing.Icon($pfad)`. Beispiel in [`examples/winforms-demo.ps1`](../examples/winforms-demo.ps1).
 - Im Web: `icon/c3yptax-icon-32.png` und `-64.png` als Favicon.
