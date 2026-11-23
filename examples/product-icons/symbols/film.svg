@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Beispielzeichen Filmstreifen mit Wiedergabe-Dreieck, für ein Werkzeug rund um Videos. Raster 100 x 100, eine Farbe, Löcher über fill-rule evenodd. -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-  <path fill-rule="evenodd" d="M14,16 H86 L92,22 V78 L86,84 H14 L8,78 V22 Z M17,23 V31 H27 V23 Z M37,23 V31 H47 V23 Z M53,23 V31 H63 V23 Z M73,23 V31 H83 V23 Z M17,69 V77 H27 V69 Z M37,69 V77 H47 V69 Z M53,69 V77 H63 V69 Z M73,69 V77 H83 V69 Z M41,38 L65,50 L41,62 Z"/>
-</svg>

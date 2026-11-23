@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Beispielzeichen Pfeil aus Schale, für ein Werkzeug zum Veröffentlichen. Raster 100 x 100, eine Farbe, Löcher über fill-rule evenodd. -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-  <path fill-rule="evenodd" d="M50,6 L84,40 H64 V66 H36 V40 H16 Z M10,56 H24 V80 H76 V56 H90 V84 L80,94 H20 L10,84 Z"/>
-</svg>

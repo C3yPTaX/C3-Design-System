@@ -63,7 +63,7 @@ Jedes Produkt bekommt ein eigenes Programmicon, damit sich die Anwendungen auf d
 - **ab 40 px:** Produktzeichen im Chip-Rahmen.
 - **Hintergrund:** transparent. Dunkel ist nur das Innere des Chips, es gibt keine quadratische Kachel. So sitzt das Icon auf hellem und dunklem Desktop ohne dunklen Rand.
 
-Die Vorlage liegt in `product-icon/c3-product-frame.svg`. `python scripts/build-product-icon.py <zeichen.svg> <zielordner>` setzt ein Zeichen ein und erzeugt ICO und PNG in allen Größen (benötigt Pillow und resvg-py). Zwei Beispiele mit Übersicht stehen in [`examples/product-icons/`](../examples/product-icons/).
+Die Vorlage liegt in `product-icon/c3-product-frame.svg`. `python scripts/build-product-icon.py <zeichen.svg> <zielordner>` setzt ein Zeichen ein und erzeugt ICO und PNG in allen Größen (benötigt Pillow und resvg-py). Beispiele sind die Ordner unter `product-icon/`, jeweils mit Zeichen, ICO und PNG.
 
 Regeln für das Zeichen:
 
